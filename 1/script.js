@@ -46,13 +46,12 @@ class ProductManager {
                             if(this.verifyCode(this.products, product.code)){
                                 this.verifyCode(this.products, product.code);
                                 this.products.push(product);
-                                this.myPanel();
                             }
                             
                             else{
                                 console.log("Producto ya existe");
-                                this.myPanel();
                             }
+                            this.myPanel();
                         });
                     });
                 });
@@ -80,9 +79,11 @@ class ProductManager {
             let id = answer;
             const result = this.products.find(product => product.id == id);
             if(!result){
-                result = "Not found";
+                console.log("Not found");
             }
-            console.log(result);
+            else{
+                console.log(result);
+            }
             this.myPanel();
         })
     }
