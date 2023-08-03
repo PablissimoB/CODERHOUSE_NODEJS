@@ -44,7 +44,7 @@ class ProductManager {
                                 stock
                             )
                             if(this.verifyCode(this.products, product.code)){
-                                this.verifyCode(this.products, product.code);
+                                // this.verifyCode(this.products, product.code);
                                 this.products.push(product);
                             }
                             
