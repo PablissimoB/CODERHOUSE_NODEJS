@@ -15,7 +15,6 @@ class ProductManager {
 
     addProduct(){
         const products = this.readProducts();
-        const id = this.getId(products);
         let title;
         let description;
         let price;
@@ -40,7 +39,7 @@ class ProductManager {
                         rl.question('Ingresa tu stock: ', (answerStock) => {
                             stock = parseInt(answerStock);
                             const product = new Product (
-                                id,title,description, price, thumbnail, code, stock
+                                title,description, price, thumbnail, code, stock
                             )
                             if(!fs.existsSync(this.path)){
                                 fs.writeFileSync(this.path,JSON.stringify(product))
@@ -55,8 +54,6 @@ class ProductManager {
                                     console.log('\x1b[31mProducto ya existe\x1b[0m');
                                 }
                             }
-                            
-
                             this.myPanel();
                         });
                     });
@@ -97,15 +94,15 @@ class ProductManager {
         })
     }
     
-    getId(arrayOfProducts){
-        let id=1
-        if(arrayOfProducts.length >0){
-            arrayOfProducts.forEach(item => {
-                item.id > id? id = item.id++:id++;
-            }); 
-        }
-        return id
-    }
+    // getId(arrayOfProducts){
+    //     let id=1
+    //     if(arrayOfProducts.length >0){
+    //         arrayOfProducts.forEach(item => {
+    //             item.id > id? id = item.id++:id++;
+    //         }); 
+    //     }
+    //     return id
+    // }
 
     updateProduct(){
         rl.question('Ingresa el id del producto a modificar: ', (answer) => {
@@ -137,7 +134,7 @@ class ProductManager {
                                 rl.question('Ingresa tu stock: ', (answerStock) => {
                                     stock = parseInt(answerStock);
                                     const product = new Product (
-                                        result.id,title,description, price, thumbnail, result.code, stock
+                                        title,description, price, thumbnail, result.code, stock
                                     )
                                     const aux = products.filter(product => product.id != id)
                                     aux.push(product);
@@ -201,14 +198,22 @@ class ProductManager {
 }
 
 class Product{
-    constructor(id, title, description, price, thumbnail, code, stock){
-        this.id = id;
+    constructor(title, description, price, thumbnail, code, stock){
+        this.id = Product.newId();
         this.title = title;
         this.description = description;
         this.price = price;
         this.thumbnail = thumbnail;
         this.code = code;
         this.stock = stock;
+    }
+    static newId() {
+        if (this.idIncrement) {
+            this.idIncrement++
+        } else {
+            this.idIncrement = 1
+        }
+        return this.idIncrement
     }
 }
 
