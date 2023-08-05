@@ -108,6 +108,7 @@ class ProductManager {
         rl.question('Ingresa el id del producto a modificar: ', (answer) => {
             let id = answer;
             const products = this.readProducts();
+            const productsUpdated = products.filter(product => product.id != id);
             const result = products.find(product => product.id == id);
             if(!result){
                 console.log('\x1b[31mNot Found\x1b[0m');
@@ -133,12 +134,13 @@ class ProductManager {
 
                                 rl.question('Ingresa tu stock: ', (answerStock) => {
                                     stock = parseInt(answerStock);
-                                    const product = new Product (
-                                        title,description, price, thumbnail, result.code, stock
-                                    )
-                                    const aux = products.filter(product => product.id != id)
-                                    aux.push(product);
-                                    fs.writeFileSync(this.path,JSON.stringify(aux));
+                                    result.title = title;
+                                    result.description = description;
+                                    result.price = price;
+                                    result.thumbnail = thumbnail;
+                                    result.stock = stock;
+                                    productsUpdated.push(result);
+                                    fs.writeFileSync(this.path,JSON.stringify(productsUpdated));
                                     this.myPanel();
                                 });
                             });
