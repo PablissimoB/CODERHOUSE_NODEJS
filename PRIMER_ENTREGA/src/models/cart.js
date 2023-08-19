@@ -1,14 +1,12 @@
 export class Cart{
-    constructor(products){
-        this.id = Product.newId();
+    constructor(id,products){
+        this.id = id;
         this.products = products;
     }
-    static newId() {
-        if (this.idIncrement) {
-            this.idIncrement++
-        } else {
-            this.idIncrement = 1
-        }
-        return this.idIncrement
+}
+export class Product{
+    constructor(id,quantity){
+        this.id = id;
+        this.quantity = quantity;
     }
 }

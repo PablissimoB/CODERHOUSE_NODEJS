@@ -8,8 +8,8 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/products', prodsRouter);
-app.use('/cart', cartRouter);
+app.use('/api/products', prodsRouter);
+app.use('/api/carts', cartRouter);
 
 app.listen(PORT,() =>{
 })

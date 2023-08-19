@@ -5,21 +5,36 @@ const cartRouter = Router()
 
 const cartManager  = new cm('src/carrito.json');
 
-cartRouter.get('/', async (req, res) => {
-    const { limit } = req.query
-    const prods = await cartManager.getProducts()
-    const products = prods.slice(0, limit)
-    res.status(200).send(products)
-})
-
-cartRouter.get('/:id', async (req, res) => {
-    const { id } = req.params
-    const prod = await cartManager.getProductById(parseInt(id))
+cartRouter.get('/:cid', async (req, res) => {
+    const { cid } = req.params
+    const prod = await cartManager.getCartById(parseInt(cid))
     if (prod)
         res.status(200).send(prod)
     else
-        res.status(404).send("Producto no existente")
+        res.status(404).send("Carrito inexistente")
 })
 
+cartRouter.post('/',async(req,res) =>{
+        const alta = cartManager.addCart(req.body);
+        if(alta){
+            res.status(200).send("Alta realizada");
+        }
+        else{
+            res.status(404).send("Error")
+        }
+})
+
+cartRouter.post('/:cid/product/:pid',async(req,res) =>{
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+    const alta = cartManager.addProductToCart(cid,pid);
+    if(alta){
+        res.status(200).send(`Producto ${pid} agregado al carrito ${cid}`);
+    }
+    else{
+        res.status(404).send("Error")
+    }
+
+})
 
 export default cartRouter
