@@ -1,17 +1,19 @@
 import { Router } from "express";
-import {CartManager as cm} from '../cart_manager.js'
+import {CartManager as cm} from '../cart_manager.js';
+import {ProductManager as pm} from '../product_manager.js';
 
 const cartRouter = Router()
 
 const cartManager  = new cm('src/carrito.json');
+const productManager = new pm('src/productos.json');
 
 cartRouter.get('/:cid', async (req, res) => {
-    const { cid } = req.params
-    const prod = await cartManager.getCartById(parseInt(cid))
+    const { cid } = req.params;
+    const prod = await cartManager.getCartById(parseInt(cid));
     if (prod)
-        res.status(200).send(prod)
+        res.status(200).send(prod);
     else
-        res.status(404).send("Carrito inexistente")
+        res.status(404).send("Carrito inexistente");
 })
 
 cartRouter.post('/',async(req,res) =>{
@@ -20,21 +22,22 @@ cartRouter.post('/',async(req,res) =>{
             res.status(200).send("Alta realizada");
         }
         else{
-            res.status(404).send("Error")
+            res.status(404).send("Error");
         }
 })
 
 cartRouter.post('/:cid/product/:pid',async(req,res) =>{
     const cid = req.params.cid;
     const pid = req.params.pid;
-    const alta = cartManager.addProductToCart(cid,pid);
-    if(alta){
-        res.status(200).send(`Producto ${pid} agregado al carrito ${cid}`);
+    const prod = await productManager.getProductById(parseInt(pid));
+    if(prod){
+        const alta = cartManager.addProductToCart(cid,pid);
+        if(alta){
+            res.status(200).send(`Producto ${pid} agregado al carrito ${cid}`);
+        }
     }
     else{
-        res.status(404).send("Error")
+        res.status(404).send(`El producto que quiere agregar al carrito ${cid} no existe`);
     }
-
 })
-
 export default cartRouter

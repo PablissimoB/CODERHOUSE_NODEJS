@@ -1,24 +1,23 @@
 import { Router } from "express";
-import {ProductManager as pm} from '../product_manager.js'
+import {ProductManager as pm} from '../product_manager.js';
 
 const productManager = new pm('src/productos.json');
-
-const prodsRouter = Router()
+const prodsRouter = Router();
 
 prodsRouter.get('/', async (req, res) => {
-    const { limit } = req.query
-    const prods = await productManager.getProducts()
-    const products = prods.slice(0, limit)
-    res.status(200).send(products)
+    const { limit } = req.query;
+    const prods = await productManager.getProducts();
+    const products = prods.slice(0, limit);
+    res.status(200).send(products);
 })
 
 prodsRouter.get('/:id', async (req, res) => {
-    const { id } = req.params
-    const prod = await productManager.getProductById(parseInt(id))
+    const { id } = req.params;
+    const prod = await productManager.getProductById(parseInt(id));
     if (prod)
-        res.status(200).send(prod)
+        res.status(200).send(prod);
     else
-        res.status(404).send("Producto no existente")
+        res.status(404).send("Producto no existente");
 })
 
 prodsRouter.post('/',async(req,res) =>{
@@ -31,7 +30,7 @@ prodsRouter.post('/',async(req,res) =>{
         }
     }
     else{
-        res.status(404).send("Ya existe un producto con ese codigo")
+        res.status(404).send("Ya existe un producto con ese codigo");
     }
 })
 
@@ -41,23 +40,21 @@ prodsRouter.put('/:id', async(req,res) =>{
     if (prod)
     {
         const actualizado = productManager.updateProduct(id,req.body);
-        res.status(200).send("Producto actualizado")
+        res.status(200).send("Producto actualizado");
     }
     else
-        res.status(404).send("El producto que trata de modificar no existe")
+        res.status(404).send("El producto que trata de modificar no existe");
 })
 
 prodsRouter.delete('/:id', async(req,res) =>{
     const {id} = req.params;
-    const prod = await productManager.getProductById(parseInt(id))
+    const prod = await productManager.getProductById(parseInt(id));
     if (prod)
     {
         const actualizado = productManager.deleteProduct(id);
-        res.status(200).send("Producto elimado")
+        res.status(200).send("Producto elimado");
     }
     else
-        res.status(404).send("El producto que trata de eliminar no existe")
+        res.status(404).send("El producto que trata de eliminar no existe");
 })
-
-
-export default prodsRouter
+export default prodsRouter;
