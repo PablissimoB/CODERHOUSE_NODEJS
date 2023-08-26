@@ -39,33 +39,38 @@ export class CartManager {
         const carts = JSON.parse(await fs.readFile(this.path, 'utf-8'));
         const cartsAux = carts.filter(cart => cart.id != cid);
         const cart = carts.find(cart => cart.id == cid);
-        if(cart.products.length != 0){
-            const prodsAux = cart.products.filter(product => product.id != pid);
-            const productAdded = cart.products.find(product => product.id == pid);
-            if(productAdded === undefined){
-                const productToAdd = new Product(pid,1);
-                prodsAux.push(productToAdd);
+        if(cart){
+            if(cart.products.length != 0){
+                const prodsAux = cart.products.filter(product => product.id != pid);
+                const productAdded = cart.products.find(product => product.id == pid);
+                if(productAdded === undefined){
+                    const productToAdd = new Product(pid,1);
+                    prodsAux.push(productToAdd);
+                }
+                else{
+                    let productToAdd = new Product(pid,productAdded.quantity);
+                    productToAdd.quantity = productAdded.quantity +1;
+                    prodsAux.push(productToAdd);
+                }
+                cart.products = prodsAux;
             }
             else{
-                let productToAdd = new Product(pid,productAdded.quantity);
-                productToAdd.quantity = productAdded.quantity +1;
-                prodsAux.push(productToAdd);
+                let productToAdd = new Product(pid,1)
+                cart.products.push(productToAdd)
             }
-            cart.products = prodsAux;
+            cartsAux.push(cart);
+            fs.writeFile(this.path, JSON.stringify(cartsAux));
         }
         else{
-            let productToAdd = new Product(pid,1)
-            cart.products.push(productToAdd)
+            return null;
         }
-        cartsAux.push(cart);
-        fs.writeFile(this.path, JSON.stringify(cartsAux));
     }
 
 
     getId(carts) {
         let id = 1;
         carts.forEach(element => {
-            element.id > 1 ? id = element.id + 1 : id;
+            element.id >= 1 ? id = element.id + 1 : id;
         })
         return id;
     }

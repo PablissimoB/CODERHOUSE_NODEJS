@@ -30,7 +30,7 @@ export class ProductManager {
     getId(products) {
         let id = 1;
         products.forEach(element => {
-            element.id > 1 ? id = element.id + 1 : id;
+            element.id >= 1 ? id = element.id + 1 : id;
         })
         return id;
     }

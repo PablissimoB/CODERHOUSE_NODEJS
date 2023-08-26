@@ -9,9 +9,9 @@ const productManager = new pm('src/productos.json');
 
 cartRouter.get('/:cid', async (req, res) => {
     const { cid } = req.params;
-    const prod = await cartManager.getCartById(parseInt(cid));
-    if (prod)
-        res.status(200).send(prod);
+    const cart = await cartManager.getCartById(parseInt(cid));
+    if (cart)
+        res.status(200).send(cart);
     else
         res.status(404).send("Carrito inexistente");
 })
@@ -30,14 +30,24 @@ cartRouter.post('/:cid/product/:pid',async(req,res) =>{
     const cid = req.params.cid;
     const pid = req.params.pid;
     const prod = await productManager.getProductById(parseInt(pid));
+    const cart = await cartManager.getCartById(parseInt(cid));
     if(prod){
         const alta = cartManager.addProductToCart(cid,pid);
-        if(alta){
+        if(cart){
             res.status(200).send(`Producto ${pid} agregado al carrito ${cid}`);
         }
+        else{
+            res.status(404).send("Carrito inexistente");
+        }
+
     }
     else{
-        res.status(404).send(`El producto que quiere agregar al carrito ${cid} no existe`);
+        if(cart){
+            res.status(404).send(`El producto que quiere agregar al carrito ${cid} no existe`);
+        }
+        else{
+            res.status(404).send(`El producto y el carrito no existen`);
+        }
     }
 })
 export default cartRouter
