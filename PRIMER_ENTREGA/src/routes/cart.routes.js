@@ -32,8 +32,8 @@ cartRouter.post('/:cid/product/:pid',async(req,res) =>{
     const prod = await productManager.getProductById(parseInt(pid));
     const cart = await cartManager.getCartById(parseInt(cid));
     if(prod){
-        const alta = cartManager.addProductToCart(cid,pid);
         if(cart){
+            const alta = cartManager.addProductToCart(cid,pid);
             res.status(200).send(`Producto ${pid} agregado al carrito ${cid}`);
         }
         else{
