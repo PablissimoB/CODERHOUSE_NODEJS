@@ -22,19 +22,25 @@ app.set('view engine', 'handlebars');
 app.set('views', path.resolve(__dirname, './views'));
 app.use('/static', express.static(path.join(__dirname, '/public')));
 
+
 const io = new Server(serverExpress)
 io.on('connection', (socket) => {
     console.log("Servidor Socket.io conectado");
     
     socket.on('nuevoProducto', async (nuevoProd) =>{
         const product = await productManager.addProduct(nuevoProd);
-        prods = await productManager.getProducts();
+        let id = 1;
+        prods.forEach(element => {
+        element.id >= 1 ? id = element.id + 1 : id;})
+
+        nuevoProd.id =id;
+        prods.push(nuevoProd);
         socket.emit('prods',prods);
     })
     
     socket.on('eliminarProducto', async (id) =>{
         const deleteProduct = await productManager.deleteProduct(id);
-        prods = await productManager.getProducts();
+        prods = prods.filter(product => product.id != id);
         socket.emit('prods',prods);
     })
 
