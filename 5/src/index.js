@@ -12,9 +12,12 @@ import { productModel } from './models/products.models.js';
 import { cartModel } from './models/carts.models.js';
 import { messageModel } from './models/messages.models.js';
 
+
 const PORT = 4000;
 const app = express();
-mongoose.connect('mongodb+srv://pablobobarini:Schumann141631@cluster0.tpb9icq.mongodb.net/?retryWrites=true&w=majority',{
+
+const credential ='';
+mongoose.connect(credential,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
