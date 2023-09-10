@@ -1,23 +1,21 @@
-function deleteProduct(id){
-    let prods;
-    if(confirm(`Desea borrar el producto ${id} ?`)){
-        const endpointDelete = `http://localhost:4000/api/products/${id}`;
+function addToCart(id_cart,id_prod) {
+    let prods; {
+        const endpoint = `http://localhost:4000/api/carts/${id_cart}/products/${id_prod}`;
 
-        fetch(endpointDelete, {
-        method: 'DELETE'
+        fetch(endpoint, {
+            method: 'POST'
         })
-        .then(response => {
-            if (response.ok) {
-                //esto lo hago porque todavia no se como renderizar products en handlebars con nuevo get
-                setTimeout(() => {
-                    location.reload();
-                  }, 1200);
-            } else {
-            console.error('Error al borrar el elemento:', response.statusText);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1200);
+                } else {
+                    console.error('Error al agregar el elemento:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 }

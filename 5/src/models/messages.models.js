@@ -14,4 +14,4 @@ const messageSchema = new Schema ({
         default: Date.now
     }
 })
-export const messageModel = model('models',messageSchema);
+export const messageModel = model('messages',messageSchema);

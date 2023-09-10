@@ -25,16 +25,22 @@ prodsRouter.get('/:id', async (req, res) => {
 })
 
 prodsRouter.post('/',async(req,res) =>{
-    const {code} = req.body;
-    const noExiste = await productModel.findOne(code);
-    if(noExiste){
-        const alta = productModel.create(req.body);
-        if(alta){
-            res.status(200).send("Alta realizada");
+    try{
+        const {code} = req.body;
+        const Existe = await productModel.findOne({code: code});
+        if(!Existe){
+            const alta = await productModel.create(req.body);
+            if(alta){
+                res.redirect('/static/');
+            }
+        }
+        else{
+            res.status(404).send("Ya existe un producto con ese codigo");
         }
     }
-    else{
-        res.status(404).send("Ya existe un producto con ese codigo");
+    catch(error){
+        console.log(error);
+        res.status(500).send("Error")
     }
 })
 

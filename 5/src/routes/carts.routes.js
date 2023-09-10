@@ -5,8 +5,8 @@ import { productModel } from "../models/products.models.js";
 const cartRouter = Router()
 
 cartRouter.get('/:cid', async (req, res) => {
-    const { cid } = req.params;
-    const cart = await cartModel.findById(parseInt(cid));
+    const cid = req.params.cid;
+    const cart = await cartModel.findById(cid).lean();
     if (cart)
         res.status(200).send(cart);
     else
@@ -14,26 +14,31 @@ cartRouter.get('/:cid', async (req, res) => {
 })
 
 cartRouter.post('/',async(req,res) =>{
-        const alta = cartModel.create();
+    try{
+        const alta = await cartModel.create();
         if(alta){
             res.status(200).send("Alta realizada");
         }
         else{
             res.status(404).send("Error");
         }
+    }
+        catch(error){
+            res.status(500).send("Error:"+error);
+        }
 })
 
 cartRouter.post('/:cid/products/:pid',async(req,res) =>{
     const cid = req.params.cid;
     const pid = req.params.pid;
-    const cart = await cartModel.findById(parseInt(cid));
     try{
+        const cart = await cartModel.findById((cid));
+        const prod = await productModel.findById((pid));
         if(cart){
-            const prod = await productModel.findById(parseInt(pid));
             if(prod){
-                const indice = cart.products.findIndex(prod => prod.id_prod === pid);
+                const indice = cart.products.findIndex(prod => prod._id.toString() == pid);
                 if(indice == -1){
-                    cart.products.push({id_prod: pid, quantity: 1});
+                    cart.products.push({'_id': pid, 'quantity': 1});
                 }
                 else{
                     cart.products[indice].quantity = cart.products[indice].quantity+1;
@@ -53,7 +58,7 @@ cartRouter.post('/:cid/products/:pid',async(req,res) =>{
     }
     catch (error){
 
-            res.status(400).send(`Error`);
+            res.status(400).send(`Error: ${error}`);
         
     }
 })
