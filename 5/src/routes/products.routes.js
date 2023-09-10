@@ -59,11 +59,13 @@ prodsRouter.put('/:id', async(req,res) =>{
 prodsRouter.delete('/:id', async(req,res) =>{
     const {id} = req.params;
     try{
-        const actualizado = productModel.findByIdAndDelete(id,req.body);
-        res.status(200).send("Producto actualizado");
+        const actualizado = await productModel.findByIdAndDelete(id);
+        if(actualizado){
+            res.status(200).send("Producto borrado");
+        }
     }
     catch(error){
-        res.status(404).send("El producto que trata de modificar no existe");
+        res.status(404).send("El producto que trata de eliminar no existe");
     }
 })
 export default prodsRouter;

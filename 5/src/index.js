@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 import userRouter from './routes/users.routes.js';
 import { productModel } from './models/products.models.js';
 import { cartModel } from './models/carts.models.js';
+import { messageModel } from './models/messages.models.js';
 
 const PORT = 4000;
 const app = express();
@@ -31,8 +32,12 @@ async function getCart(){
     const cart = await cartModel.findById('64fd09d885e276a633a2e8aa').lean();
     return cart;
 }
+async function getMessages(){
+    const response = await messageModel.find().lean();
+    return response.toString();
+}
 
-let prods = await getProducts();
+let mensajes = [];
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -46,9 +51,9 @@ app.use('/static', express.static(path.join(__dirname, '/public')));
 const io = new Server(serverExpress)
 io.on('connection', (socket) => {
     console.log("Servidor Socket.io conectado");
-    socket.on('eliminarProducto', async (id) =>{
-        prods = prods.filter(product => product.id != id);
-        socket.emit('prods',prods);
+    socket.on('mensaje', (infoMensaje) => {
+        mensajes.push(infoMensaje);
+        socket.emit('mensajes', mensajes)
     })
 })
 
@@ -63,7 +68,7 @@ app.use('/api/carts', cartRouter);
 app.use('/api/messages', messageRouter);
 
 app.get('/static', async (req, res) => {
-    prods = await getProducts();
+    let prods = await getProducts();
     const cart = await getCart();
     res.render('home', {
         products: prods,
@@ -73,9 +78,15 @@ app.get('/static', async (req, res) => {
 })
 
 app.get('/static/realtimeproducts', async (req, res) => {
-    prods = await getProducts();
+    let prods = await getProducts();
     res.render('realtimeproducts', {
         products: prods,
         js: 'realTimeProducts.js'
+    })
+})
+
+app.get('/static/Chat', async (req, res) => {
+    res.render('chat', {
+        js: 'messages.js'
     })
 })

@@ -7,9 +7,8 @@ function addToCart(id_cart,id_prod) {
         })
             .then(response => {
                 if (response.ok) {
-                    setTimeout(() => {
+                        alert("producto agregado");
                         location.reload();
-                    }, 1200);
                 } else {
                     console.error('Error al agregar el elemento:', response.statusText);
                 }
