@@ -1,0 +1,1 @@
+[{"id":1,"title":"papa","description":"","price":100,"thumbnail":"","code":"pap01","stock":5},{"id":3,"title":"mandarina","description":"","price":500,"thumbnail":"","code":"mand01","stock":9}]
