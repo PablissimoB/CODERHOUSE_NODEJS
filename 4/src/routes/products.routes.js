@@ -13,7 +13,7 @@ prodsRouter.get('/', async (req, res) => {
 
 prodsRouter.get('/:id', async (req, res) => {
     const { id } = req.params;
-    const prod = await productManager.getProductById(parseInt(id));
+    const prod = await productManager.getProductById(id);
     if (prod)
         res.status(200).send(prod);
     else
@@ -36,7 +36,7 @@ prodsRouter.post('/',async(req,res) =>{
 
 prodsRouter.put('/:id', async(req,res) =>{
     const {id} = req.params;
-    const prod = await productManager.getProductById(parseInt(id))
+    const prod = await productManager.getProductById(id)
     if (prod)
     {
         const actualizado = productManager.updateProduct(id,req.body);
@@ -48,7 +48,7 @@ prodsRouter.put('/:id', async(req,res) =>{
 
 prodsRouter.delete('/:id', async(req,res) =>{
     const {id} = req.params;
-    const prod = await productManager.getProductById(parseInt(id));
+    const prod = await productManager.getProductById(id);
     if (prod)
     {
         const actualizado = productManager.deleteProduct(id);
