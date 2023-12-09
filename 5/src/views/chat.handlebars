@@ -1,0 +1,24 @@
+<h1> Chat</h1>
+
+<div>
+    <form>
+        <div class="row">
+            <input type="email" name="email" id="email">
+        </div>
+        <div class="row">
+            <textarea  id="message" name="message" rows="3"></textarea>
+        </div>
+        
+    <button id="botonChat">Enviar</button>
+    </form>
+</div>
+
+<div>
+    {{#each messages}}
+    <div id="parrafosMensajes">
+        <p>
+        {{this.postTime}}: el usuario {{this.email}} escribio {{this.message}}
+        </p>
+    </div>
+    {{/each}}
+</div>
