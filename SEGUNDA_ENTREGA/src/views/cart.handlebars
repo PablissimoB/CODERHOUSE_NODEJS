@@ -1,0 +1,13 @@
+<h1>Resumen de carrito</h1>
+<hr>
+{{#each cart.products}}
+    <div class="card text-bg-success mb-3" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">idProducto: {{this._id}}</h5>
+            <p class="card-text">{{this.quantity}}</p>
+            <button onclick="substractToCart('64fd09d885e276a633a2e8aa','{{this._id}}');" class="btn btn-danger"> - </button>
+            <button onclick="addToCart('64fd09d885e276a633a2e8aa','{{this._id}}');" class="btn btn-secondary"> + </button>
+        </div>
+    </div>
+
+{{/each}}
