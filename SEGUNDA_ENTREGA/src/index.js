@@ -16,7 +16,7 @@ import { messageModel } from './models/messages.models.js';
 const PORT = 4000;
 const app = express();
 
-const credential ='mongodb+srv://pablobobarini:Schumann141631@cluster0.tpb9icq.mongodb.net/?retryWrites=true&w=majority';
+const credential ='';
 mongoose.connect(credential,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
