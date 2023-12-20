@@ -37,9 +37,14 @@ async function getProductById(id){
 }
 
 
-async function getCart(){
-    const cart = await cartModel.findById('64fd09d885e276a633a2e8aa').lean();
-    return cart;
+async function getCart(cid){
+    try{
+        const cart = await cartModel.findById(cid).populate('products._id').lean();
+        return cart;
+    }
+    catch(error){
+        console.log(error)
+    }
 }
 async function getMessages(){
     const response = await messageModel.find().lean();
@@ -74,30 +79,27 @@ app.use('/api/messages', messageRouter);
 
 app.get('/static', async (req, res) => {
     let prods = await getProducts();
-    const cart = await getCart();
     res.render('home', {
         products: prods,
-        id_carrito : cart._id,
         js: 'main.js'
     })
 })
 
-app.get('/cart/:cid', async (req, res) => {
+app.get('/static/cart/:cid', async (req, res) => {
     const cid = req.params.cid;
-    const cart = await getCart();
+    const cart = await getCart(cid);
     res.render('cart', {
-        cart : cart
+        cart : cart,
+        js: 'cart.js'
     })
 })
 
-app.get('/product/:pid', async (req, res) => {
+app.get('/static/product/:pid', async (req, res) => {
     const pid = req.params.pid;
     if(pid){
         let prod = await getProductById(pid);
-        const cart = await getCart();
         res.render('product', {
             product: prod,
-            id_carrito : cart._id,
             js: 'product.js'
         })
     }

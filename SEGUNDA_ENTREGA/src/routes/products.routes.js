@@ -3,21 +3,34 @@ import { productModel } from "../models/products.models.js";
 
 const prodsRouter = Router();
 
-//completar este metodo
 prodsRouter.get('/', async (req, res) => {
-    const { limit } = req.query.limit;
-    //
-    const {page} = req.query.page;
-    const {sort} = req.query.sort; // asc|desc
-    const {query} = req.query.query;
-    //
+    const { limit } = parseInt(req.query.limit) || 10;
+    const {page} = parseInt(req.query.page) || 1;
+    const { sort } = req.query.sort ||"" ;
+    const { query} = req.query.query || "";
+
+    const criterio = {};
+
+    const opciones = {
+        limit : limit,
+        page : page,
+        lean: true
+    }
+
+    if(sort) {
+        opciones.sort = sort === "ASC"? {price: 1} : { price: -1};
+    }
+    if(query) {
+        if (req.query.title) { criterio.title = req.query.title }
+        if (req.query.category) { criterio.category = req.query.category }
+    }   
 
     try{
-        const prods = await productModel.find();
-        res.status(200).send(prods.slice(0, limit !="" ? limit:10 ));
+        const prods = await productModel.paginate(criterio, opciones);
+        res.status(200).send(prods);
     }
     catch(error){
-        res.status(400).send("Error");        
+        res.status(400).json({ message: error.message });        
     }
 })
 
