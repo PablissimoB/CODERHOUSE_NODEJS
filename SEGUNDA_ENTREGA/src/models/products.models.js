@@ -32,6 +32,10 @@ const productSchema = new Schema ({
         type: Boolean,
         default: true
     }
-})
+},{
+    strict: 'throw',
+    versionKey: false
+}
+    )
 productSchema.plugin(mongoosePaginate)
 export const productModel = model('products',productSchema);

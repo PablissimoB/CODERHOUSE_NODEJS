@@ -4,10 +4,11 @@ import { productModel } from "../models/products.models.js";
 const prodsRouter = Router();
 
 prodsRouter.get('/', async (req, res) => {
-    const { limit } = parseInt(req.query.limit) || 10;
-    const {page} = parseInt(req.query.page) || 1;
-    const { sort } = req.query.sort ||"" ;
-    const { query} = req.query.query || "";
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const sort = req.query.sort ||"" ;
+    const titleQuery  = req.query.title || "";
+    const categoryQuery   = req.query.categoryQuery || "";
 
     const criterio = {};
 
@@ -20,10 +21,8 @@ prodsRouter.get('/', async (req, res) => {
     if(sort) {
         opciones.sort = sort === "ASC"? {price: 1} : { price: -1};
     }
-    if(query) {
-        if (req.query.title) { criterio.title = req.query.title }
-        if (req.query.category) { criterio.category = req.query.category }
-    }   
+    if (titleQuery) { criterio.title = titleQuery }
+    if (categoryQuery) { criterio.category = categoryQuery }
 
     try{
         const prods = await productModel.paginate(criterio, opciones);
