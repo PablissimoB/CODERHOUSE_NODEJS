@@ -1,0 +1,25 @@
+<h1>Registro</h1>
+<hr>
+<form>
+  <div class="row">
+    <label for="nombre">Username</label>
+    <input name="nombre" type="text" placeholder="nombre" required>
+  </div>
+  <div class="row">
+  <label for="userType">UserType</label>
+  <select name="userType">
+    <option value="admin">Admin</option>
+    <option value="normal">Usuario</option>
+  </select>
+  </div>
+  <div class="row">
+    <label for="email">Email</label>
+  <input name="email" type="email" placeholder="email" required>
+</div>
+<div class="row">
+    <label for="password">Password</label>
+    <input name="password" type="password" placeholder="password" required><br>
+</div>
+  <button type="submit" class="btn btn-success">Registrar</button>
+</form>
+<script src="/static/js/userRegister.js"></script>
