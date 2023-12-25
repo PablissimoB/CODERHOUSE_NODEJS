@@ -1,6 +1,6 @@
 import session from 'express-session'
 import connectMongo from 'connect-mongo'
-import { cred} from './config.js';
+import { cred} from '../config.js';
 
 const store = connectMongo.create({
     mongoUrl:cred
