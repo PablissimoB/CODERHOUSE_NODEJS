@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { userModel } from "../models/users.models.js";
+import { doHash } from "../utils/cryptographic.js";
 
 const userRouter = Router()
 userRouter.get('/', async (req,res) => {
@@ -30,8 +31,10 @@ userRouter.get('/:id', async (req, res) => {
 
 userRouter.post('/', async (req,res) => {
     const {nombre,userType, email, password} = req.body
+
+    const hashPass = doHash(password);
     try{
-        const respuesta = await userModel.create({nombre,userType, email, password});
+        const respuesta = await userModel.create({nombre,userType, email, hashPass});
         res.status(200).send({mensaje: respuesta});
     }
     catch(error){
