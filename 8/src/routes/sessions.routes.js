@@ -23,15 +23,15 @@ sessionsRouter.post('/', async (req,res) => {
       })
   }
   req.session['user'] = {
-    nombre: usuario.nombre,
-    apellido: usuario.apellido,
+    nombre: usuario.first_name,
+    apellido: usuario.last_name,
     email: usuario.email,
   }
 
-  if (usuario.userType === 'admin') {
+  if (usuario.role === 'admin') {
     req.session['user'].rol = 'admin'
   } else {
-    req.session['user'].rol = 'usuario'
+    req.session['user'].rol = ''
   }
 
   res

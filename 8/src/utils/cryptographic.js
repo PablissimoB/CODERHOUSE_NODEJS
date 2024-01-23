@@ -1,9 +1,38 @@
-import { hashSync, compareSync, genSaltSync } from "bcrypt";
+import jwt from "jsonwebtoken";
+import {JWT_SECRET} from "../config.js"
 
-export function doHash(code){
-    return hashSync(code, genSaltSync(12));
+export function encrypt(code){
+    return new Promise ((res, rej) => {
+        if(!code){
+            rej(new Error('no data sended'));
+        }
+        else{
+            jwt.sign(code,JWT_SECRET, (error, encoded) => {
+                if(error){
+                    rej(error);
+                }
+                else{
+                    res(encoded);
+                }
+            })
+        }
+    });
 }
 
-export function verifyHash(sended, base){
-    return compareSync(sended,base);
+export function decrypt(code){
+    return new Promise ((res, rej) => {
+        if(!code){
+            rej(new Error('no data sended'));
+        }
+        else{
+            jwt.verify(code,JWT_SECRET, (error, decoded) =>{
+                if(error){
+                    rej(error)
+                }
+                else{
+                    res(decoded)
+                }
+            })
+        }
+    });
 }
