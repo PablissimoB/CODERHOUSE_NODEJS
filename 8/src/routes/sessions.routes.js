@@ -23,8 +23,8 @@ sessionsRouter.post('/', async (req,res) => {
       })
   }
   req.session['user'] = {
-    nombre: usuario.first_name,
-    apellido: usuario.last_name,
+    first_name: usuario.first_name,
+    last_name: usuario.last_name,
     email: usuario.email,
   }
 
