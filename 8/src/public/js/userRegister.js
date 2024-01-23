@@ -9,7 +9,11 @@ formRegister?.addEventListener('submit', async event => {
     // @ts-ignore
     body: new URLSearchParams(new FormData(formRegister))
   })
+  if(response.status ===201){
+    window.location.href = '/static/UserLogin';
+  }
+  else{
+    alert('failed registration');
+  }
 
-  window.location.href = '/static/UserLogin'
-  
 })
