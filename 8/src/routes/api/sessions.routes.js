@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { userModel } from "../models/users.models.js";
+import { userModel } from "../../models/users.models.js";
 
 const sessionsRouter = Router()
+
 sessionsRouter.get('/', async (req,res) => {
     try{
        
@@ -13,7 +14,8 @@ sessionsRouter.get('/', async (req,res) => {
 
 sessionsRouter.post('/', async (req,res) => {
     try{
-        const usuario = await userModel.findOne(req.body)
+        const {email, password} = req.body;
+        const usuario = await userModel.login(email, password);
   if (!usuario) {
     return res
       .status(401)
@@ -26,13 +28,9 @@ sessionsRouter.post('/', async (req,res) => {
     first_name: usuario.first_name,
     last_name: usuario.last_name,
     email: usuario.email,
+    rol : usuario.role
   }
 
-  if (usuario.role === 'admin') {
-    req.session['user'].rol = 'admin'
-  } else {
-    req.session['user'].rol = ''
-  }
 
   res
     .status(201)

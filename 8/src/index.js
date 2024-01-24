@@ -1,21 +1,22 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import {sesiones} from './middlewares/sesiones.js'
-import prodsRouter from "./routes/products.routes.js";
-import cartRouter from "./routes/carts.routes.js";
-import messageRouter from './routes/messages.routes.js';
+import prodsRouter from "./routes/api/products.routes.js";
+import cartRouter from "./routes/api/carts.routes.js";
+import messageRouter from './routes/api/messages.routes.js';
 import { __dirname } from './path.js';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
 import path from 'path';
 import mongoose from 'mongoose';
-import userRouter from './routes/users.routes.js';
-import sessionsRouter from './routes/sessions.routes.js';
+import userRouter from './routes/api/users.routes.js';
+import sessionsRouter from './routes/api/sessions.routes.js';
 import { productModel } from './models/products.models.js';
 import { cartModel } from './models/carts.models.js';
 import { messageModel } from './models/messages.models.js';
 import { cred} from './config.js';
 import {onlyLogueadosWeb} from './middlewares/auth.js'
+import { usersWebRouter } from './routes/web/users.routes.js';
 
 
 const PORT = 4000;
@@ -84,6 +85,7 @@ app.use('/api/users', userRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/messages', messageRouter);
+app.use('/',usersWebRouter);
 
 app.get('/static', onlyLogueadosWeb , async (req, res) => {
     let prods = await getProducts();
@@ -126,24 +128,6 @@ app.get('/static/realtimeproducts', onlyLogueadosWeb, async (req, res) => {
     })
 })
 
-app.get('/static/userRegister', async (req, res) => {
-    res.render('userRegister', {
-        js: 'userRegister.js'
-    })
-})
-
-app.get('/static/userLogin', async (req, res) => {
-    res.render('userLogin', {
-        js: 'userLogin.js'
-    })
-})
-
-app.get('/static/userProfile', onlyLogueadosWeb, async (req, res) => {
-    res.render('userProfile', {
-        ...req.session['user'],
-        js: 'userProfile.js'
-    })
-})
 
 app.get('/static/Chat', onlyLogueadosWeb, async (req, res) => {
     mensajes = await getMessages();

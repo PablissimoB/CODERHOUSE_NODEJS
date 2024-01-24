@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { userModel } from "../models/users.models.js";
-import { encrypt } from "../utils/cryptographic.js";
+import { userModel } from "../../models/users.models.js";
+import { encrypt } from "../../utils/cryptographic.js";
 
 const userRouter = Router()
 userRouter.get('/', async (req,res) => {
@@ -33,9 +33,9 @@ userRouter.post('/', async (req,res) => {
     const {first_name,last_name, role, email, password} = req.body
     try{
         const user = await userModel.create({first_name, last_name,role, email, password});
-        const token = encrypt(user.toObject());
-
-        res.json({
+        const token = await encrypt(user.toObject());
+        
+        res.status(201).json({
             status:'success',
             payload: user.toObject(),
             token

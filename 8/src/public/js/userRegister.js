@@ -9,11 +9,8 @@ formRegister?.addEventListener('submit', async event => {
     // @ts-ignore
     body: new URLSearchParams(new FormData(formRegister))
   })
-  if(response.status ===201){
+    const data = await response.json()
     window.location.href = '/static/UserLogin';
-  }
-  else{
-    alert('failed registration');
-  }
+    localStorage.setItem('token', data.token)
 
 })
