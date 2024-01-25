@@ -1,5 +1,6 @@
 import { Router } from "express";
-import {onlyLogueadosWeb} from '../../middlewares/auth.js'
+import {onlyRole} from '../../middlewares/authorization.js'
+import { decrypt } from '../../utils/cryptographic.js';
 
 export const usersWebRouter = Router()
 
@@ -18,9 +19,9 @@ usersWebRouter.get('/static/userLogin', async (req, res) => {
 })
 
 //profile
-usersWebRouter.get('/static/userProfile', onlyLogueadosWeb, async (req, res) => {
+usersWebRouter.get('/static/userProfile', onlyRole('both'),  async (req, res) => {
     res.render('userProfile', {
-        ...req.session['user'],
+        ... await decrypt(req.signedCookies['authorization']),
         js: 'userProfile.js'
     })
 })

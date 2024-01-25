@@ -1,4 +1,5 @@
 import express from 'express'
+import { JWT_SECRET } from './config.js';
 import cookieParser from 'cookie-parser'
 import {sesiones} from './middlewares/sesiones.js'
 import prodsRouter from "./routes/api/products.routes.js";
@@ -15,8 +16,11 @@ import { productModel } from './models/products.models.js';
 import { cartModel } from './models/carts.models.js';
 import { messageModel } from './models/messages.models.js';
 import { cred} from './config.js';
-import {onlyLogueadosWeb} from './middlewares/auth.js'
+import {authentication} from './middlewares/authentication.js'
+import {onlyRole} from './middlewares/authorization.js'
+
 import { usersWebRouter } from './routes/web/users.routes.js';
+import { cookies } from './middlewares/cookies.js';
 
 
 const PORT = 4000;
@@ -61,7 +65,7 @@ let mensajes;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser(JWT_SECRET));
 app.use(sesiones);
 
 app.engine('handlebars', engine());
@@ -80,6 +84,9 @@ io.on('connection', (socket) => {
 })
 
 app.use(express.urlencoded({ extended: true }));
+app.use(cookies)
+app.use(authentication)
+
 app.use('/api/products', prodsRouter);
 app.use('/api/users', userRouter);
 app.use('/api/sessions', sessionsRouter);
@@ -87,7 +94,14 @@ app.use('/api/carts', cartRouter);
 app.use('/api/messages', messageRouter);
 app.use('/',usersWebRouter);
 
-app.get('/static', onlyLogueadosWeb , async (req, res) => {
+
+app.get('/static/Error', async (req, res) => {
+    res.render('error', {
+        js: 'error.js'
+    })
+})
+
+app.get('/static', onlyRole('both'),  async (req, res) => {
     let prods = await getProducts();
     res.render('home', {
         products: prods,
@@ -96,7 +110,7 @@ app.get('/static', onlyLogueadosWeb , async (req, res) => {
     })
 })
 
-app.get('/static/cart/:cid',  async (req, res) => {
+app.get('/static/cart/:cid', onlyRole('user'),   async (req, res) => {
     const cid = req.params.cid;
     const cart = await getCart(cid);
     res.render('cart', {
@@ -105,7 +119,7 @@ app.get('/static/cart/:cid',  async (req, res) => {
     })
 })
 
-app.get('/static/product/:pid', onlyLogueadosWeb, async (req, res) => {
+app.get('/static/product/:pid', onlyRole('user'), async (req, res) => {
     const pid = req.params.pid;
     if(pid){
         let prod = await getProductById(pid);
@@ -120,7 +134,7 @@ app.get('/static/product/:pid', onlyLogueadosWeb, async (req, res) => {
     
 })
 
-app.get('/static/realtimeproducts', onlyLogueadosWeb, async (req, res) => {
+app.get('/static/realtimeproducts', onlyRole('admin'),   async (req, res) => {
     let prods = await getProducts();
     res.render('realtimeproducts', {
         products: prods,
@@ -129,7 +143,7 @@ app.get('/static/realtimeproducts', onlyLogueadosWeb, async (req, res) => {
 })
 
 
-app.get('/static/Chat', onlyLogueadosWeb, async (req, res) => {
+app.get('/static/Chat', onlyRole('user'),  async (req, res) => {
     mensajes = await getMessages();
     res.render('chat', {
         messages : mensajes,
