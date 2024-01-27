@@ -7,7 +7,7 @@ const user = document.getElementById('email');
 
 
 botonChat.addEventListener('click', () => {
-    let fechaActual = new Date().toLocaleString();
+    let fechaActual = new Date();
     const data = {
         "email": user.value,
         "message" : valInput.value,

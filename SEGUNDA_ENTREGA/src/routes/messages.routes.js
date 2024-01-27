@@ -14,8 +14,6 @@ messageRouter.get('/', async (req, res) => {
 })
 
 messageRouter.post('/',async(req,res) =>{
-    const {code} = req.body;
-
         const alta = messageModel.create(req.body);
         if(alta){
             res.status(200).send();
