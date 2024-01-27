@@ -1,0 +1,15 @@
+<h1>Resumen de carrito</h1>
+<hr>
+<button onclick="emptyCart('64fd09d885e276a633a2e8aa');" class="btn btn-danger"> Vaciar Carrito </button>
+{{#each cart.products}}
+    <div class="card text-bg-success mb-3" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Titulo: {{this._id.title}}</h5>
+            <p class="card-text">Cantidad: {{this.quantity}}</p>
+            {{!-- <button onclick="lessQuantity('64fd09d885e276a633a2e8aa','{{this._id._id}}');" class="btn btn-secondary"> - </button> --}}
+            <button onclick="addToCart('64fd09d885e276a633a2e8aa','{{this._id._id}}');" class="btn btn-secondary"> + </button>
+        </div>
+        <button onclick="substractToCart('64fd09d885e276a633a2e8aa','{{this._id._id}}');" class="btn btn-danger"> eliminar </button>
+    </div>
+
+{{/each}}
