@@ -15,6 +15,7 @@ import { JWT_SECRET } from '../config.js';
 import { __dirname } from '../path.js';
 import { cartsWebRouter } from '../routes/web/carts.routes.js';
 import { productsWebRouter } from '../routes/web/products.routes.js';
+import { messagesWebRouter } from '../routes/web/messages.routes.js';
 
 export const app = express()
 
@@ -37,3 +38,4 @@ app.use('/api/messages', messageRouter);
 app.use('/',usersWebRouter);
 app.use('/',cartsWebRouter);
 app.use('/',productsWebRouter);
+app.use('/',messagesWebRouter);

@@ -2,10 +2,9 @@ import { PORT } from './config.js';
 import { __dirname } from './path.js';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
-import { messageModel } from './dao/messages.models.js';
 import { cred} from './config.js';
-import {onlyRole} from './middlewares/authorization.js'
 import { app } from './app/app.js';
+import { mensajes } from './routes/web/messages.routes.js';
 
 
 const credential = cred;
@@ -18,15 +17,16 @@ mongoose.connect(credential,{
 const serverExpress = app.listen(PORT, () => {
 })
 
-async function getMessages(){
-    const response = await messageModel.find().lean();
-    return response;
-}
+// async function getMessages(){
+//     const response = await messageModel.find().lean();
+//     return response;
+// }
 
-let mensajes;
+// let mensajes;
 
 
-const io = new Server(serverExpress)
+export const io = new Server(serverExpress)
+
 io.on('connection', (socket) => {
     console.log("Servidor Socket.io conectado");
     socket.on('mensaje', (infoMensaje) => {
@@ -35,7 +35,6 @@ io.on('connection', (socket) => {
     })
 })
 
-
 app.get('/static/Error', async (req, res) => {
     res.render('error', {
         js: 'error.js'
@@ -43,11 +42,10 @@ app.get('/static/Error', async (req, res) => {
 })
 
 
-
-app.get('/static/Chat', onlyRole('user'),  async (req, res) => {
-    mensajes = await getMessages();
-    res.render('chat', {
-        messages : mensajes,
-        js: 'messages.js'
-    })
-})
+// app.get('/static/Chat', onlyRole('user'),  async (req, res) => {
+//     mensajes = await getMessages();
+//     res.render('chat', {
+//         messages : mensajes,
+//         js: 'messages.js'
+//     })
+// })
