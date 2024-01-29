@@ -12,7 +12,6 @@ export async function getAll(req,res,next){
         page : page,
         lean: true
     }
-
     if(sort) {
         opciones.sort = sort === "ASC"? {price: 1} : { price: -1};
     }
@@ -30,13 +29,17 @@ export async function getAll(req,res,next){
 
 
 export async function getById(req,res,next){
-
+    try {
     const { id } = req.params;
     const prod = await ProductsServices.getById(id);
     if (prod)
         res.status(200).send(prod);
     else
         res.status(404).send("Producto no existente");
+    }
+    catch (error) {
+        next(error)
+    }
 }
 
 

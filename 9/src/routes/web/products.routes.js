@@ -1,35 +1,25 @@
 import { productModel } from '../../dao/models/products.models.js';
 import { Router } from "express";
 import {onlyRole} from '../../middlewares/authorization.js'
+import axios from 'axios';
 
 export const productsWebRouter = Router()
 
-async function getProducts(){
-    const resultado = await productModel.find({}).lean();
-    return resultado;
-}
-
-async function getProductById(id){
-    const resultado = await productModel.findById(id).lean();
-    return resultado;
-}
-
 productsWebRouter.get('/static', onlyRole('both'),  async (req, res) => {
-    let prods = await getProducts();
+    let prods = await axios.get('http://localhost:4000/api/products');
     res.render('home', {
-        products: prods,
+        products: prods.data.docs,
         ...req.session['user'],
         js: 'main.js'
     })
 })
 
-
 productsWebRouter.get('/static/product/:pid', onlyRole('both'), async (req, res) => {
     const pid = req.params.pid;
     if(pid){
-        let prod = await getProductById(pid);
+        let prod = await axios.get('http://localhost:4000/api/products/'+pid);
         res.render('product', {
-            product: prod,
+            product: prod.data,
             js: 'product.js'
         })
     }
@@ -40,9 +30,9 @@ productsWebRouter.get('/static/product/:pid', onlyRole('both'), async (req, res)
 })
 
 productsWebRouter.get('/static/realtimeproducts', onlyRole('admin'),   async (req, res) => {
-    let prods = await getProducts();
+    let prods = await axios.get('http://localhost:4000/api/products');
     res.render('realtimeproducts', {
-        products: prods,
+        products: prods.data.docs,
         js: 'realTimeProducts.js'
     })
 })
