@@ -21,6 +21,18 @@ async paginar (criterio, opciones){
         const product = await productsDao.create(data)
         return product
     }
+
+    async putOne(id,data){
+        const product = await productsDao.updateById(id,data)
+        return product
+    }
+
+    async deleteOne(id){
+        const product = await productsDao.deleteById(id)
+        return product
+    }
 }
+
+
 
 export const ProductsServices = new ProductsService();

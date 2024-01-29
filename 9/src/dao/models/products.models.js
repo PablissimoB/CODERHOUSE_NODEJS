@@ -61,13 +61,22 @@ class ProductDao {
     async readMany(query) {
       return await productModel.find(query).lean()
     }
-  
+    
+    async updateById(id,data){
+        return await productModel.findByIdAndUpdate(id,data).lean();
+    }
+
+
     async updateOne(query, data) {
       return await productModel.updateOne(query,data).lean()
     }
   
     async updateMany(query, data) {
       return await productModel.updateMany(query,data).lean()
+    }
+
+    async deleteById(id){
+        return await productModel.findByIdAndDelete(id).lean();
     }
   
     async deleteOne(query) {

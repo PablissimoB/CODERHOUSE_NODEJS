@@ -1,5 +1,4 @@
 import { usersServices } from "../services/users.services.js";
-import { ObjectId as ObjId } from "mongoose";
 
 export async function get(req,res,next){
     const id = req.params.id;

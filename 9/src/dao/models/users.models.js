@@ -30,20 +30,6 @@ const userSchema = new Schema({
         strict: 'throw',
         versionKey: false,
         statics: {
-            register: async function (userData) {
-                try {
-                  if (userData.password) {
-                    userData.password = await hash(userData.password)
-                  }
-                  delete userData.rol
-                  const user = await this.create(userData)
-                  return user.toObject()
-                } catch (error) {
-                  const typedError = new Error(error.message)
-                  typedError['type'] = 'INVALID_ARGUMENT'
-                  throw typedError
-                }
-              },
             autenticar: async function ({ email, password }) {
                 const user = await this.findOne({ email })
                 if (!user) {
@@ -65,8 +51,19 @@ export const userModel = model('users', userSchema);
 
 class UserDao {
   async create(data){
-    const usuario = await userModel.create(data)
-    return usuario.toObject()
+    try {
+      if (data.password) {
+        data.password = await hash(data.password)
+      }
+      delete data.rol
+      const user = await userModel.create(data)
+      return user.toObject()
+    } catch (error) {
+      const typedError = new Error(error.message)
+      typedError['type'] = 'INVALID_ARGUMENT'
+      throw typedError
+    }
+    
   }
 
   async readOne(query) {

@@ -3,6 +3,7 @@ import { userModel } from "../../dao/models/users.models.js";
 import { tokenizeUserInCookie } from '../../middlewares/token.js'
 import passport from 'passport'
 import { get } from "../../controllers/user.controller.js";
+import { usersServices } from "../../services/users.services.js";
 
 const userRouter = Router()
 
@@ -31,7 +32,7 @@ userRouter.get('/:id', get)
 
 userRouter.post('/', async (req, res) => {
     try {
-        const user = await userModel.register(req.body)
+        const user = await usersServices.addUser(req.body)
         req.user = user
         res.status(201).json({
             status: 'success',

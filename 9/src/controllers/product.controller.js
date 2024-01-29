@@ -42,6 +42,31 @@ export async function getById(req,res,next){
     }
 }
 
+export async function putById(req,res,next){
+    const {id} = req.params;
+    try{
+        const actualizado = ProductsServices.putOne(id,req.body);
+        res.status(200).send("Producto actualizado");
+    }
+    catch(error){
+        res.status(404).send("El producto que trata de modificar no existe");
+    }
+}
+
+export async function deleteById(req,res,next){
+    const {id} = req.params;
+    try{
+        const actualizado = await ProductsServices.deleteOne(id);
+        if(actualizado){
+            res.status(200).send("Producto borrado");
+        }
+    }
+    catch(error){
+        res.status(404).send("El producto que trata de eliminar no existe");
+    }
+}
+
+
 
 export async function post(req,res,next){
     try {

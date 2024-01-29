@@ -1,32 +1,13 @@
 import { Router } from "express";
 import { cartModel } from "../../dao/models/carts.models.js";
 import { productModel } from "../../dao/models/products.models.js";
+import { getAll, post } from "../../controllers/cart.controller.js";
 
 const cartRouter = Router()
 
-cartRouter.get('/:cid', async (req, res) => {
-    const cid = req.params.cid;
-    const cart = await cartModel.findById(cid).lean();
-    if (cart)
-        res.status(200).send(cart);
-    else
-        res.status(404).send("Carrito inexistente");
-})
+cartRouter.get('/:cid', getAll)
 
-cartRouter.post('/',async(req,res) =>{
-    try{
-        const alta = await cartModel.create();
-        if(alta){
-            res.status(200).send("Alta realizada");
-        }
-        else{
-            res.status(404).send("Error");
-        }
-    }
-        catch(error){
-            res.status(500).send("Error:"+error);
-        }
-})
+cartRouter.post('/',post)
 
 cartRouter.post('/:cid/products/:pid',async(req,res) =>{
     const cid = req.params.cid;

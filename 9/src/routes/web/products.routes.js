@@ -1,4 +1,3 @@
-import { productModel } from '../../dao/models/products.models.js';
 import { Router } from "express";
 import {onlyRole} from '../../middlewares/authorization.js'
 import axios from 'axios';

@@ -1,24 +1,14 @@
 import { Router } from "express";
 import {onlyRole} from '../../middlewares/authorization.js'
-import { cartModel } from '../../dao/models/carts.models.js';
+import axios from 'axios';
 
 export const cartsWebRouter = Router()
 
-async function getCart(cid){
-    try{
-        const cart = await cartModel.findById(cid).populate('products._id').lean();
-        return cart;
-    }
-    catch(error){
-        console.log(error)
-    }
-}
-
 cartsWebRouter.get('/static/cart/:cid', onlyRole('user'),   async (req, res) => {
     const cid = req.params.cid;
-    const cart = await getCart(cid);
+    const cart = await axios.get('http://localhost:4000/api/carts/'+cid);
     res.render('cart', {
-        cart : cart,
+        cart : cart.data,
         js: 'cart.js'
     })
 })
