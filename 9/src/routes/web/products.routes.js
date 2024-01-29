@@ -1,4 +1,4 @@
-import { productModel } from '../../dao/products.models.js';
+import { productModel } from '../../dao/models/products.models.js';
 import { Router } from "express";
 import {onlyRole} from '../../middlewares/authorization.js'
 
@@ -10,7 +10,7 @@ async function getProducts(){
 }
 
 async function getProductById(id){
-    const resultado = await productModel.findById({_id:id}).lean();
+    const resultado = await productModel.findById(id).lean();
     return resultado;
 }
 
@@ -24,7 +24,7 @@ productsWebRouter.get('/static', onlyRole('both'),  async (req, res) => {
 })
 
 
-productsWebRouter.get('/static/product/:pid', onlyRole('user'), async (req, res) => {
+productsWebRouter.get('/static/product/:pid', onlyRole('both'), async (req, res) => {
     const pid = req.params.pid;
     if(pid){
         let prod = await getProductById(pid);

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose"
-import { hash, verifyHash } from '../utils/cryptographic.js';
+import { hash, verifyHash } from '../../utils/cryptographic.js';
 
 const userSchema = new Schema({
     first_name: String,
@@ -62,3 +62,46 @@ const userSchema = new Schema({
     }
 )
 export const userModel = model('users', userSchema);
+
+class UserDao {
+  async create(data){
+    const usuario = await userModel.create(data)
+    return usuario.toObject()
+  }
+
+  async readOne(query) {
+    return await userModel.findOne(query).lean()
+  }
+
+  async readById(id){
+    return await userModel.findById(id).lean()
+  }
+
+  async readMany(query) {
+    return await userModel.find(query).lean()
+  }
+
+  async updateOne(query, data) {
+    return await userModel.updateOne(query,data).lean()
+  }
+
+  async updateMany(query, data) {
+    return await userModel.updateMany(query,data).lean()
+  }
+
+  async deleteOne(query) {
+    return await userModel.deleteOne(query).lean()
+  }
+
+  async deleteMany(query) {
+    return await userModel.deleteMany(query).lean()
+  }
+}
+
+let userDaoMongo
+export async function getUserDao(){
+  if(!userDaoMongo){
+    userDaoMongo = new UserDao()
+  }
+  return userDaoMongo;
+}

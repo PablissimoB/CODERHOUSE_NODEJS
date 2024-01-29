@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userModel } from "../../dao/users.models.js";
+import { userModel } from "../../dao/models/users.models.js";
 import {deleteTokenFromCookie, tokenizeUserInCookie} from '../../middlewares/token.js'
 
 const sessionsRouter = Router()

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {onlyRole} from '../../middlewares/authorization.js'
-import { cartModel } from '../../dao/carts.models.js';
+import { cartModel } from '../../dao/models/carts.models.js';
 
 export const cartsWebRouter = Router()
 

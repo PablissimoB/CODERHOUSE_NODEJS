@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {onlyRole} from '../../middlewares/authorization.js'
-import { messageModel } from '../../dao/messages.models.js';
+import { messageModel } from '../../dao/models/messages.models.js';
 import { io } from "../../index.js";
 
 

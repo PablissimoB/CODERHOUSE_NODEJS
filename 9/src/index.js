@@ -17,14 +17,6 @@ mongoose.connect(credential,{
 const serverExpress = app.listen(PORT, () => {
 })
 
-// async function getMessages(){
-//     const response = await messageModel.find().lean();
-//     return response;
-// }
-
-// let mensajes;
-
-
 export const io = new Server(serverExpress)
 
 io.on('connection', (socket) => {
@@ -40,12 +32,3 @@ app.get('/static/Error', async (req, res) => {
         js: 'error.js'
     })
 })
-
-
-// app.get('/static/Chat', onlyRole('user'),  async (req, res) => {
-//     mensajes = await getMessages();
-//     res.render('chat', {
-//         messages : mensajes,
-//         js: 'messages.js'
-//     })
-// })
