@@ -13,7 +13,7 @@ import {JWT_SECRET} from '../config.js';
         }
         return token
       },
-      secretOrKey: JWT_SECRET,
+      secretOrKey: "'"+JWT_SECRET+"'",
     },
     (user, done) => {
       done(null, user)

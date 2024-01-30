@@ -14,7 +14,7 @@ mongoose.connect(credential,{
 })
 .then(()=> console.log('conectado con Base'))
 .catch(() => console.log('error en Base'));
-const serverExpress = app.listen(PORT, () => {
+const serverExpress = app.listen(4000, () => {
 })
 
 export const io = new Server(serverExpress)

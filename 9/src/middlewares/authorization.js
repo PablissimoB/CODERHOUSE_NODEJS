@@ -1,5 +1,4 @@
 
-import {JWT_SECRET} from '../config.js';
 import { decrypt } from '../utils/cryptographic.js';
 
 //Autorizacion

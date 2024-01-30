@@ -20,7 +20,7 @@ export function encrypt(data){
           typedError['type'] = 'INTERNAL_ERROR'
           return reject(typedError)
         }
-        jwt.sign(data, JWT_SECRET, { expiresIn: '24h' }, (err, encoded) => {
+        jwt.sign(data, "'"+JWT_SECRET+"'", { expiresIn: '24h' }, (err, encoded) => {
           if (err) {
             const typedError = new Error(err.message)
             typedError['type'] = 'INTERNAL_ERROR'
@@ -37,7 +37,7 @@ export function decrypt(token){
         if (!token) {
           return reject(new Error('no token to decode!'))
         }
-        jwt.verify(token, JWT_SECRET, (err, decoded) => {
+        jwt.verify(token, "'"+JWT_SECRET+"'", (err, decoded) => {
           if (err) {
             reject(err)
           } else {

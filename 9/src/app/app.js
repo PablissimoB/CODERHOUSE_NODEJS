@@ -21,7 +21,7 @@ export const app = express()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser(JWT_SECRET));
+app.use(cookieParser("'"+JWT_SECRET+"'"));
 app.use(sesiones);
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');

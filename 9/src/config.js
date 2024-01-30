@@ -1,3 +1,9 @@
-export const cred = ''
-export const JWT_SECRET = 'coder'
-export const PORT = 4000;
+import dotenv from 'dotenv'
+
+dotenv.config({
+    path: './src/.env'
+})
+
+export const cred = process.env.cred
+export const JWT_SECRET = process.env.JWT_SECRET
+export const PORT = process.env.PORT
