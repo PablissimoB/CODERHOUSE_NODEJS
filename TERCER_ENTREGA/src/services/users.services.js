@@ -10,8 +10,12 @@ class UsersService {
         }
     }
     async addUser(data){
-        const user = await usersDao.create(data)
+        const user = await usersDao.new(data)
         return user
+    }
+    async getAllUser (){
+        const users = await usersDao.readMany();
+        return users
     }
 }
 

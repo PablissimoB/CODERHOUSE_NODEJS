@@ -1,5 +1,6 @@
 import { toPOJO } from '../../utils/utils.js'
 import { userModel } from './users.models.js'
+import { hash } from '../../utils/cryptographic.js'
 
 class UserDao {
   
@@ -7,7 +8,7 @@ class UserDao {
         this.usuariosModel = userModel
       }
 
-    async create(data){
+    async new(data){
       try {
         if (data.password) {
           data.password = await hash(data.password)
@@ -31,8 +32,8 @@ class UserDao {
       return toPOJO(await userModel.findById(id).lean());
     }
   
-    async readMany(query) {
-      return toPOJO(await userModel.find(query).lean());
+    async readMany() {
+      return toPOJO(await userModel.find().lean());
     }
   
     async updateOne(query, data) {

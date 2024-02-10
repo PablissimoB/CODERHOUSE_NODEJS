@@ -1,4 +1,5 @@
 import { usersServices } from "../services/users.services.js";
+import { toPOJO } from "../utils/utils.js";
 
 export async function get(req,res,next){
     const id = req.params.id;
@@ -16,10 +17,10 @@ export async function get(req,res,next){
         }
 }
 
-export async function post(req,res,next){
+export async function postUser(req,res,next){
     try {
         const usuario = await usersServices.addUser(req.body)
-        req.user = user
+        req.user = usuario
         res.status(201).json({
             status: 'success',
             payload: user.toObject(),
@@ -30,4 +31,24 @@ export async function post(req,res,next){
     catch (error) {
         res.status(400).send({ mensaje: error });
     }
+}
+
+export async function autenticar(req,res,next){
+    const { user } = req;
+    const { cart, email, role, first_name, last_name } = user;
+    const responseObject = { cart, email, role, first_name, last_name };
+    res.json(toPOJO(responseObject))
+}
+
+export async function getAllUsers(req, res,next){
+    try {
+        const users = await usersServices.getAllUser()
+        res.status(200).send(toPOJO(users))
+    } catch (error) {
+        next(error)
+    }
+}
+
+export async function getUserToJson(req, res,next){
+    res.json(req.user)
 }

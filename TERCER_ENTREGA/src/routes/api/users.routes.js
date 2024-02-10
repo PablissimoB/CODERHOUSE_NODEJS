@@ -2,56 +2,27 @@ import { Router } from "express";
 import { userModel } from "../../dao/user/users.models.js";
 import { tokenizeUserInCookie } from '../../middlewares/token.js'
 import passport from 'passport'
-import { get } from "../../controllers/user.controller.js";
+import { autenticar, get, getAllUsers, getUserToJson, postUser } from "../../controllers/user.controller.js";
 import { usersServices } from "../../services/users.services.js";
-import { toPOJO } from "../../utils/utils.js";
+import {onlyRole} from '../../middlewares/authorization.js'
 
 const userRouter = Router()
 
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', 
     passport.authenticate('jwt', { failWithError: true, session: false }),
-        soloRoles(['admin']),
-        async (req, res, next) => {
-            try {
-                const users = await userModel.find().lean()
-                res.json(users)
-            } catch (error) {
-                next(error)
-            }
-        }
-
-})
+    onlyRole(['admin']),
+    getAllUsers
+)
 
 userRouter.get('/current',
     passport.authenticate('jwt', { failWithError: true, session: false }),
-    async (req, res) => {
-        const { user } = req;
-        const { cart, email, role, first_name, last_name } = user;
-        const responseObject = { cart, email, role, first_name, last_name };
-        res.json(toPOJO(responseObject))
-    }
+    autenticar
 )
-
 userRouter.get('/:id', get)
 
-userRouter.post('/', async (req, res) => {
-    try {
-        const user = await usersServices.addUser(req.body)
-        req.user = user
-        res.status(201).json({
-            status: 'success',
-            payload: user.toObject(),
-            token
-        });
-    }
-    catch (error) {
-        res.status(400).send({ mensaje: error });
-    }
-},
+userRouter.post('/', postUser,
     tokenizeUserInCookie,
-    (req, res) => {
-        res.json(req.user)
-    }
+    getUserToJson
 )
 
 userRouter.put('/:id', async (req, res) => {
