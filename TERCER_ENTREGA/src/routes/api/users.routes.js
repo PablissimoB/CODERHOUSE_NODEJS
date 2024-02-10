@@ -3,7 +3,6 @@ import { userModel } from "../../dao/user/users.models.js";
 import { tokenizeUserInCookie } from '../../middlewares/token.js'
 import passport from 'passport'
 import { autenticar, get, getAllUsers, getUserToJson, postUser } from "../../controllers/user.controller.js";
-import { usersServices } from "../../services/users.services.js";
 import {onlyRole} from '../../middlewares/authorization.js'
 
 const userRouter = Router()

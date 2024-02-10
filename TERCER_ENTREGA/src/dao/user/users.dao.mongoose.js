@@ -5,7 +5,7 @@ import { hash } from '../../utils/cryptographic.js'
 class UserDao {
   
     constructor() {
-        this.usuariosModel = userModel
+        this.userModel = userModel
       }
 
     async new(data){
@@ -14,7 +14,7 @@ class UserDao {
           data.password = await hash(data.password)
         }
         delete data.rol
-        const user = await userModel.create(data)
+        const user = await this.userModel.create(data)
         return user.toObject()
       } catch (error) {
         const typedError = new Error(error.message)
@@ -25,31 +25,31 @@ class UserDao {
     }
   
     async readOne(query) {
-      return toPOJO(await userModel.findOne(query).lean());
+      return toPOJO(await this.userModel.findOne(query).lean());
     }
   
     async readById(id){
-      return toPOJO(await userModel.findById(id).lean());
+      return toPOJO(await this.userModel.findById(id).lean());
     }
   
     async readMany() {
-      return toPOJO(await userModel.find().lean());
+      return toPOJO(await this.userModel.find().lean());
     }
   
     async updateOne(query, data) {
-      return toPOJO(await userModel.updateOne(query,data).lean());
+      return toPOJO(await this.userModel.updateOne(query,data).lean());
     }
   
     async updateMany(query, data) {
-      return toPOJO(await userModel.updateMany(query,data).lean());
+      return toPOJO(await this.userModel.updateMany(query,data).lean());
     }
   
     async deleteOne(query) {
-      return toPOJO(await userModel.deleteOne(query).lean());
+      return toPOJO(await this.userModel.deleteOne(query).lean());
     }
   
     async deleteMany(query) {
-      return toPOJO(await userModel.deleteMany(query).lean());
+      return toPOJO(await this.userModel.deleteMany(query).lean());
     }
   }
   
