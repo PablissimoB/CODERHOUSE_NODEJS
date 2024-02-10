@@ -52,3 +52,37 @@ export async function getAllUsers(req, res,next){
 export async function getUserToJson(req, res,next){
     res.json(req.user)
 }
+
+export async function updateUser(req, res,next){
+    const { id } = req.params;
+    const { first_name, last_name, role, email, password } = req.body
+    const users = await usersServices.updateUser(id, { first_name, last_name, role, email, password });
+    try {
+        if (users) {
+            res.status(200).send(users);
+        }
+        else {
+            res.status(404).send("Usuario no existente");
+        }
+    }
+    catch (error) {
+        res.status(400).send({ mensaje: error });
+    }
+}
+
+export async function deleteUser(req, res,next){
+    const { id } = req.params;
+    const users = await usersServices.deleteUser(id);
+    try {
+        if (users) {
+            res.status(200).send(users);
+        }
+        else {
+            res.status(404).send("Usuario no existente");
+        }
+    }
+    catch (error) {
+        res.status(400).send({ mensaje: error });
+    }
+
+}

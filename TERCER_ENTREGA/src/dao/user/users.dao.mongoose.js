@@ -40,6 +40,10 @@ class UserDao {
       return toPOJO(await this.userModel.updateOne(query,data).lean());
     }
   
+    async findUpdateOne(id, data) {
+      return toPOJO(await this.userModel.findByIdAndUpdate(id,data).lean());
+    }
+
     async updateMany(query, data) {
       return toPOJO(await this.userModel.updateMany(query,data).lean());
     }
@@ -47,7 +51,10 @@ class UserDao {
     async deleteOne(query) {
       return toPOJO(await this.userModel.deleteOne(query).lean());
     }
-  
+  async findDeleteOne(id){
+    return toPOJO(await this.userModel.findByIdAndDelete(id).lean());
+  }
+
     async deleteMany(query) {
       return toPOJO(await this.userModel.deleteMany(query).lean());
     }

@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose"
-import { hash, verifyHash } from '../../utils/cryptographic.js';
-import { toPOJO } from '../../utils/utils.js'
+import { verifyHash } from '../../utils/cryptographic.js';
 
 const userSchema = new Schema({
     first_name: String,

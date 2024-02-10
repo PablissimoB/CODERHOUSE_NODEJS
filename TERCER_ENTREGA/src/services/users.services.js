@@ -17,6 +17,14 @@ class UsersService {
         const users = await usersDao.readMany();
         return users
     }
+    async deleteUser(id){
+        const users = await usersDao.findDeleteOne(id);
+        return users
+    }
+    async updateUser(id,data){
+        const users = await usersDao.findUpdateOne(id, data);
+        return users
+    }
 }
 
 export const usersServices = new UsersService();
