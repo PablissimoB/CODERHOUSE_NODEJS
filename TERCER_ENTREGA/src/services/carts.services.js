@@ -1,5 +1,5 @@
 
-import { getCartDao } from "../dao/cart/cart.dao.mongoose.js";
+import { getCartDao } from "../dao/cart/cart.dao.js";
 
 const cartsDao = await getCartDao();
 

@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const cartSchema = new Schema({
+export const cartSchema = new Schema({
     products: {
         type: [
             {
