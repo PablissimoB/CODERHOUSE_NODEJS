@@ -1,27 +1,18 @@
 import { Router } from "express";
-import { userModel } from "../../dao/user/users.models.js";
 import {deleteTokenFromCookie, tokenizeUserInCookie} from '../../middlewares/token.js'
+import { authenticateUserSession } from "../../controllers/user.controller.js";
+
 
 const sessionsRouter = Router()
 
-sessionsRouter.post('/',
-  async (req, res, next) => {
-    try {
-      const user = await userModel.autenticar(req.body)
-      req.user = user
-      next()
-    } catch (error) {
-      next(error)
-    }
-  },
-  tokenizeUserInCookie,
+
+sessionsRouter.post('/', authenticateUserSession,  tokenizeUserInCookie,
   (req, res) => {
     res.sendStatus(201)
   }
 )
 
-sessionsRouter.delete('/current',
-  deleteTokenFromCookie,
+sessionsRouter.delete('/current',  deleteTokenFromCookie,
   (req, res) => {
     res.sendStatus(204)
   }

@@ -1,5 +1,7 @@
 import { cartsServices } from "../services/carts.services.js";
 import { ProductsServices } from "../services/products.services.js";
+import { ticketService } from "../services/tickets.services.js";
+
 
 export async function getAll(req,res,next){
     try {
@@ -15,6 +17,55 @@ export async function getAll(req,res,next){
         res.status(400).json({ message: error.message });      
     }   
 }
+export async function purchase(req,res,next){
+    try {
+    const cid = req.params.cid;
+    const email = req.body;
+
+    const cart = await cartsServices.getById(cid);
+    if (cart){
+        
+        const prods = await ProductsServices.getProducts();
+        if(prods){
+
+            //verifico stock y cantidad
+            const productsUnavailables = cart.products.filter(cartProduct => {
+                const matchingProduct = prods.find(product => product._id === cartProduct._id);
+                return matchingProduct && cartProduct.quantity > matchingProduct.stock;
+            });
+
+            //extraigo del carrito aquellos productos que no estan disponibles
+            cart.products = cart.products.filter(cartProduct => {
+                const matchingProduct = prods.find(product => product._id === cartProduct._id);
+                return !matchingProduct || cartProduct.quantity <= matchingProduct.stock;
+            });
+
+            //recorro cada producto del carrito para calcular monto total
+            let amount =0
+            for(const product of cart.products) {
+                amount += Number(product._id.price) * Number(product.quantity);
+            }
+
+
+
+            const ticket = await ticketService.createTicket({amount : amount , purchaser: email.email });
+            
+            
+            cart.products = productsUnavailables;
+            // const actualizado = await cartsServices.putOne({_id: cid}, {$set:cart});
+            res.status(200).send(ticket);
+        }
+    }
+    else{
+        res.status(404).send("Carrito inexistente");
+    }
+} catch (error) {
+    res.status(400).json({ message: error.message });      
+}  
+    
+
+}
+
 
 export async function post(req,res,next){
     try{

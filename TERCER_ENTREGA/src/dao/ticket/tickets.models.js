@@ -15,7 +15,7 @@ const TicketSchema = new Schema ({
         required: true
     },
     purchaser: {
-        type: String,
+        type: String
     }
 }, {
     strict: 'throw',

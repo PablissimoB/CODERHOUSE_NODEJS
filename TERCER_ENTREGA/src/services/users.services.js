@@ -25,6 +25,10 @@ class UsersService {
         const users = await usersDao.findUpdateOne(id, data);
         return users
     }
+    async autenthicateUser(email, password){
+        const users = await usersDao.verifyUser(email,password);
+        return users
+    }
 }
 
 export const usersServices = new UsersService();

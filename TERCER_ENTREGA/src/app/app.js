@@ -16,6 +16,7 @@ import { __dirname } from '../path.js';
 import { cartsWebRouter } from '../routes/web/carts.routes.js';
 import { productsWebRouter } from '../routes/web/products.routes.js';
 import { messagesWebRouter } from '../routes/web/messages.routes.js';
+import ticketRouter from '../routes/api/tickets.routes.js';
 
 export const app = express()
 
@@ -35,6 +36,7 @@ app.use('/api/users', userRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/messages', messageRouter);
+app.use('/api/tickets', ticketRouter);
 app.use('/',usersWebRouter);
 app.use('/',cartsWebRouter);
 app.use('/',productsWebRouter);

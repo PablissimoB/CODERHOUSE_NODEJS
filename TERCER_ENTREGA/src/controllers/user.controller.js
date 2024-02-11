@@ -84,5 +84,15 @@ export async function deleteUser(req, res,next){
     catch (error) {
         res.status(400).send({ mensaje: error });
     }
-
+}
+export async function authenticateUserSession(req, res,next){
+    const { email, password } = req.body;
+    
+    try {
+        const user = await usersServices.autenthicateUser(email, password)
+        req.user = user
+        next()
+      } catch (error) {
+        next(error)
+      }
 }

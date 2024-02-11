@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose"
-import { verifyHash } from '../../utils/cryptographic.js';
 
 const userSchema = new Schema({
     first_name: String,
@@ -28,23 +27,7 @@ const userSchema = new Schema({
 },
     {
         strict: 'throw',
-        versionKey: false,
-        statics: {
-            autenticar: async function ({ email, password }) {
-                const user = await this.findOne({ email })
-                if (!user) {
-                  const typedError = new Error('error de autenticacion')
-                  typedError['type'] = 'FAILED_AUTHENTICATION'
-                  throw typedError
-                }
-                if (!verifyHash(password ,user.password)) {
-                  const typedError = new Error('error de autenticacion')
-                  typedError['type'] = 'FAILED_AUTHENTICATION'
-                  throw typedError
-                }
-                return user.toObject()
-              }
-            }
+        versionKey: false
     }
 )
 export const userModel = model('users', userSchema);
