@@ -22,7 +22,7 @@ export async function getByIdTicket(req,res){
             res.status(200).send(ticket);
         }
         else{
-            res.status(404).send("Carrito inexistente");
+            res.status(404).send("Ticket inexistente");
         }
     } catch (error) {
         res.status(400).json({ message: error.message });      

@@ -30,29 +30,36 @@ export async function purchase(req,res,next){
 
             //verifico stock y cantidad
             const productsUnavailables = cart.products.filter(cartProduct => {
-                const matchingProduct = prods.find(product => product._id === cartProduct._id);
+                const matchingProduct = prods.find(product => product._id === cartProduct._id._id);
                 return matchingProduct && cartProduct.quantity > matchingProduct.stock;
             });
 
             //extraigo del carrito aquellos productos que no estan disponibles
             cart.products = cart.products.filter(cartProduct => {
-                const matchingProduct = prods.find(product => product._id === cartProduct._id);
+                const matchingProduct = prods.find(product => product._id === cartProduct._id._id);
                 return !matchingProduct || cartProduct.quantity <= matchingProduct.stock;
             });
+
+            
 
             //recorro cada producto del carrito para calcular monto total
             let amount =0
             for(const product of cart.products) {
                 amount += Number(product._id.price) * Number(product.quantity);
+                
+                //actualizo stock
+                const prod = await ProductsServices.getById(product._id._id)
+                const newStock = prod.stock - product.quantity;
+                await ProductsServices.putOne(product._id._id,{stock : newStock} )
             }
 
-
-
+            //creo el ticket
             const ticket = await ticketService.createTicket({amount : amount , purchaser: email.email });
             
-            
+            //actualizo carrito con productos no disponibles
             cart.products = productsUnavailables;
-            // const actualizado = await cartsServices.putOne({_id: cid}, {$set:cart});
+            await cartsServices.putOne({_id: cid}, {$set:cart});
+
             res.status(200).send(ticket);
         }
     }
