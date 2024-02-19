@@ -5,8 +5,7 @@ const usersDao = await getUserDao();
 class UsersService {
     async getUser(field,value){
         if(field == '_id'){
-            const user = await usersDao.readById(value);
-            return user;
+            return await usersDao.readOne({field : value});
         }
     }
     async addUser(data){

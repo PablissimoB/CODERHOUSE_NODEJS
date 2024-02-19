@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { addProductToCart, emptyCart, getAll, modifyCart, modifyProductQuantityCart, post, purchase, substractProductToCart } from "../../controllers/cart.controller.js";
+import { manejoDeErrores } from "../../middlewares/manejoErrores.js";
 
 const cartRouter = Router()
 
@@ -11,6 +12,6 @@ cartRouter.delete('/:cid/products/:pid', substractProductToCart)
 cartRouter.delete('/:cid', emptyCart)
 cartRouter.put('/:cid', modifyCart)
 cartRouter.put('/:cid/products/:pid', modifyProductQuantityCart)
-
+cartRouter.use(manejoDeErrores)
 
 export default cartRouter

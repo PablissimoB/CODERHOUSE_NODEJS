@@ -1,4 +1,6 @@
 import { ProductsServices } from "../services/products.services.js";
+import { errorService } from "../error/error.services.js";
+import { ErrorType } from "../error/enum.js";
 
 export async function getAll(req,res,next){
     const limit = parseInt(req.query.limit) || 10;
@@ -23,22 +25,27 @@ export async function getAll(req,res,next){
         res.status(200).send(prods);
     }
     catch(error){
-        res.status(400).json({ message: error.message });        
+        const errorNew = errorService.newError(ErrorType.NOT_FOUND, 'Error en la busqueda')
+        next(errorNew);
     }
 }
 
 
 export async function getById(req,res,next){
     try {
-    const { id } = req.params;
+    const {id} = req.params;
     const prod = await ProductsServices.getById(id);
     if (prod)
         res.status(200).send(prod);
-    else
-        res.status(404).send("Producto no existente");
+    else{
+        const errorNew = errorService.newError(ErrorType.NOT_FOUND, 'Producto no existente')
+        next(errorNew)
+        // res.status(404).send("Producto no existente");
+    }
     }
     catch (error) {
-        next(error)
+            const errorNew = errorService.newError(ErrorType.POST_ERROR, error.message)
+            next(error);
     }
 }
 
@@ -49,7 +56,9 @@ export async function putById(req,res,next){
         res.status(200).send("Producto actualizado");
     }
     catch(error){
-        res.status(404).send("El producto que trata de modificar no existe");
+        const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'El producto que trata de modificar no existe')
+        next(errorNew);
+        // res.status(404).send("El producto que trata de modificar no existe");
     }
 }
 
@@ -62,7 +71,9 @@ export async function deleteById(req,res,next){
         }
     }
     catch(error){
-        res.status(404).send("El producto que trata de eliminar no existe");
+        const errorNew = errorService.newError(ErrorType.DELETE_ERROR, error.message)
+        next(errorNew);
+        // res.status(404).send("El producto que trata de eliminar no existe");
     }
 }
 
@@ -77,9 +88,14 @@ export async function post(req,res,next){
         res.redirect('/static/');
         }
         else{
-            res.status(404).send("Ya existe un producto con ese codigo");
+            const errorNew = errorService.newError(ErrorType.POST_ERROR, 'Ya existe un producto con ese codigo')
+            next(error);
+            // res.status(404).send("Ya existe un producto con ese codigo");
         }
     } catch (error) {
-        next(error)
+        
+            const errorNew = errorService.newError(ErrorType.POST_ERROR, error.message)
+            next(errorNew);
+        
     }
 }

@@ -1,5 +1,8 @@
 import { usersServices } from "../services/users.services.js";
 import { toPOJO } from "../utils/utils.js";
+import { errorService } from "../error/error.services.js";
+import { ErrorType } from "../error/enum.js";
+
 
 export async function get(req,res,next){
     const id = req.params.id;
@@ -9,11 +12,13 @@ export async function get(req,res,next){
                 res.status(200).send(user);
             }
             else {
-                res.status(404).send("Usuario no existente");
+                const errorNew = errorService.newError(ErrorType.NOT_FOUND, 'Usuario no existente')
+                next(errorNew);
             }
         }
         catch (error) {
-            res.status(400).send({ mensaje: error });
+            const errorNew = errorService.newError(ErrorType.SERVER_ERROR, 'Error en el servidor')
+            next(errorNew);
         }
 }
 
@@ -29,7 +34,7 @@ export async function postUser(req,res,next){
         next();
     }
     catch (error) {
-        res.status(400).send({ mensaje: error });
+        next(error)
     }
 }
 
@@ -45,7 +50,8 @@ export async function getAllUsers(req, res,next){
         const users = await usersServices.getAllUser()
         res.status(200).send(toPOJO(users))
     } catch (error) {
-        next(error)
+        const errorNew = errorService.newError(ErrorType.SERVER_ERROR, error.message)
+        next(errorNew);
     }
 }
 
@@ -62,11 +68,13 @@ export async function updateUser(req, res,next){
             res.status(200).send(users);
         }
         else {
-            res.status(404).send("Usuario no existente");
+            const errorNew = errorService.newError(ErrorType.NOT_FOUND, 'Usuario inexistente')
+            next(errorNew);
         }
     }
     catch (error) {
-        res.status(400).send({ mensaje: error });
+        const errorNew = errorService.newError(ErrorType.SERVER_ERROR, error.message)
+        next(errorNew);
     }
 }
 
@@ -82,7 +90,7 @@ export async function deleteUser(req, res,next){
         }
     }
     catch (error) {
-        res.status(400).send({ mensaje: error });
+        next(error)
     }
 }
 export async function authenticateUserSession(req, res,next){

@@ -1,7 +1,8 @@
+import { ErrorType } from "../error/enum.js";
 import { cartsServices } from "../services/carts.services.js";
 import { ProductsServices } from "../services/products.services.js";
 import { ticketService } from "../services/tickets.services.js";
-
+import { errorService } from "../error/error.services.js";
 
 export async function getAll(req,res,next){
     try {
@@ -11,10 +12,13 @@ export async function getAll(req,res,next){
             res.status(200).send(cart);
         }
         else{
-            res.status(404).send("Carrito inexistente");
+
         }
+
     } catch (error) {
-        res.status(400).json({ message: error.message });      
+        const errorNew = errorService.newError(ErrorType.SERVER_ERROR, error.message)
+        next(errorNew);
+
     }   
 }
 export async function purchase(req,res,next){
@@ -64,10 +68,12 @@ export async function purchase(req,res,next){
         }
     }
     else{
-        res.status(404).send("Carrito inexistente");
+        const errorNew = errorService.newError(ErrorType.NOT_FOUND, 'Carrito no existente')
+        next(errorNew);
     }
 } catch (error) {
-    res.status(400).json({ message: error.message });      
+    const errorNew = errorService.newError(ErrorType.POST_ERROR, 'Error al generar Ticket')
+    next(errorNew);      
 }  
     
 
@@ -80,12 +86,10 @@ export async function post(req,res,next){
         if(alta){
             res.status(200).send("Alta realizada");
         }
-        else{
-            res.status(404).send("Error");
-        }
     }
         catch(error){
-            res.status(500).send("Error:"+error);
+            const errorNew = errorService.newError(ErrorType.POST_ERROR, 'Error al agregar registro')
+            next(errorNew);
         }
 }
 
@@ -93,7 +97,7 @@ export async function substractProductToCart(req,res,next){
     try{
         const cid = req.params.cid;
         const pid = req.params.pid;
-        try{
+       
             const cart = await cartsServices.getById(cid);
             if(cart){
                 const newProductsArray = cart.products.filter(product => product._id._id != pid
@@ -106,23 +110,24 @@ export async function substractProductToCart(req,res,next){
                     }
                 }
                 else{
-                    res.status(400).send("No existe el producto que desea borrar en el carrito");
+                    const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'No existe el producto que desea borrar en el carrito')
+                    next(errorNew);
+                    // res.status(400).send("No existe el producto que desea borrar en el carrito");
                 }
             }
             else{
-                res.status(400).send("No existe el carrito");
+                const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'El carrito que trata de modificar no existe')
+                next(errorNew);
+                // res.status(400).send("No existe el carrito");
             }
         }
         catch(error){
-            res.status(404).send("Hubo un problema en el proceso");
-        }
-    }
-        catch(error){
-            res.status(500).send("Error:"+error);
+            const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'Error al modificar carrito')
+            next(errorNew);
         }
 }
 
-export async function addProductToCart(req,res){
+export async function addProductToCart(req,res,next){
     const cid = req.params.cid;
     const pid = req.params.pid;
     try{
@@ -141,23 +146,24 @@ export async function addProductToCart(req,res){
                 res.status(200).send(`Producto ${pid} agregado al carrito ${cid}`);
             }
             else{
-                res.status(404).send("Producto inexistente");
+                const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'El producto que trata de agregar no existe')
+                next(errorNew);
+                // res.status(404).send("Producto inexistente");
             }
             
         }
-        else{
-            res.status(404).send("Carrito inexistente");
-        }
+        
 
     }
     catch (error){
-
-            res.status(400).send(`Error: ${error}`);
+        const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'El carrito que trata de modificar no existe')
+        next(errorNew);
+        // next(error)
         
     }
 }
 
-export async function emptyCart (req,res) {
+export async function emptyCart (req,res,next) {
     const cid = req.params.cid;
     try{
         const cart = await cartsServices.getById(cid);
@@ -168,12 +174,11 @@ export async function emptyCart (req,res) {
                 res.status(200).send("Productos borrados del carrito");
             }
         }
-        else{
-            res.status(400).send("No existe el carrito");
-        }
     }
     catch(error){
-        res.status(400).send(`Error: ${error}`);
+        const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'No existe el carrito')
+            next(errorNew);
+            // next(error)
     }
 }
 export async function modifyCart (req,res) {
@@ -190,19 +195,24 @@ export async function modifyCart (req,res) {
                 await cart.save();
             }
             else{
-                res.status(400).send("El producto ya figura en el carrito");
+                const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'El producto ya figura en el carrito')
+                next(errorNew);
+                // res.status(400).send("El producto ya figura en el carrito");
             }
         }
         else {
-            res.status(400).send('No se encontró el carrito');
+            const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'No existe el carrito')
+            next(errorNew);
+            // res.status(400).send('No se encontró el carrito');
         }
     }
     catch(error){
-        res.status(400).send(`Error: ${error}`);
+        const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'Error al vaciar el carrito')
+        next(errorNew);
     }
 }
 
-export async function modifyProductQuantityCart (req,res) {
+export async function modifyProductQuantityCart (req,res,next) {
     const cid = req.params.cid;
     const pid = req.params.pid;
     const quantity = req.body.quantity;
@@ -215,14 +225,20 @@ export async function modifyProductQuantityCart (req,res) {
                 await cart.save();
             }
             else{
-                res.status(400).send("No existe el producto que desea modificar en el carrito");
+                const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'No existe el producto que desea modificar en el carrito')
+                next(errorNew);
+                // res.status(400).send("No existe el producto que desea modificar en el carrito");
             }
         }
         else {
-            res.status(400).send('No se encontró el carrito');
+            const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'No se encontró el carrito')
+            next(errorNew);
+            // res.status(400).send('No se encontró el carrito');
         }
     }
     catch(error){
-        res.status(400).send(`Error: ${error}`);
+        const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'Error en el la actualizacion del carrito')
+        next(errorNew);
+        // next(error)
     }
 }

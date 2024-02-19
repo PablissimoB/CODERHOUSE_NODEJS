@@ -3,6 +3,7 @@ import { tokenizeUserInCookie } from '../../middlewares/token.js'
 import passport from 'passport'
 import { autenticar, deleteUser, get, getAllUsers, getUserToJson, postUser, updateUser } from "../../controllers/user.controller.js";
 import {onlyRole} from '../../middlewares/authorization.js'
+import { manejoDeErrores } from "../../middlewares/manejoErrores.js";
 
 const userRouter = Router()
 
@@ -12,5 +13,6 @@ userRouter.get('/:id', get)
 userRouter.post('/', postUser,tokenizeUserInCookie,getUserToJson)
 userRouter.put('/:id', updateUser)
 userRouter.delete('/:id', deleteUser)
+userRouter.use(manejoDeErrores)
 
 export default userRouter
