@@ -1,3 +1,4 @@
+import { logger } from "../utils/logger.js";
 import { ProductsServices } from "../services/products.services.js";
 import { errorService } from "../error/error.services.js";
 import { ErrorType } from "../error/enum.js";
@@ -25,6 +26,7 @@ export async function getAll(req,res,next){
         res.status(200).send(prods);
     }
     catch(error){
+        logger.info(error.message)
         const errorNew = errorService.newError(ErrorType.NOT_FOUND, 'Error en la busqueda')
         next(errorNew);
     }
@@ -39,11 +41,12 @@ export async function getById(req,res,next){
         res.status(200).send(prod);
     else{
         const errorNew = errorService.newError(ErrorType.NOT_FOUND, 'Producto no existente')
+        logger.info(errorNew)
         next(errorNew)
-        // res.status(404).send("Producto no existente");
     }
     }
     catch (error) {
+            logger.info(error.message)
             const errorNew = errorService.newError(ErrorType.POST_ERROR, error.message)
             next(error);
     }
@@ -56,6 +59,7 @@ export async function putById(req,res,next){
         res.status(200).send("Producto actualizado");
     }
     catch(error){
+        logger.info(error.message)
         const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'El producto que trata de modificar no existe')
         next(errorNew);
         // res.status(404).send("El producto que trata de modificar no existe");
@@ -71,6 +75,7 @@ export async function deleteById(req,res,next){
         }
     }
     catch(error){
+        logger.info(error.message)
         const errorNew = errorService.newError(ErrorType.DELETE_ERROR, error.message)
         next(errorNew);
         // res.status(404).send("El producto que trata de eliminar no existe");
@@ -89,11 +94,12 @@ export async function post(req,res,next){
         }
         else{
             const errorNew = errorService.newError(ErrorType.POST_ERROR, 'Ya existe un producto con ese codigo')
-            next(error);
+            logger.info(errorNew)
+            next(errorNew);
             // res.status(404).send("Ya existe un producto con ese codigo");
         }
     } catch (error) {
-        
+            logger.info(error.message)
             const errorNew = errorService.newError(ErrorType.POST_ERROR, error.message)
             next(errorNew);
         

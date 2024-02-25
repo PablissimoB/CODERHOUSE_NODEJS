@@ -1,4 +1,5 @@
 import { messagesServices } from "../services/messages.services.js";
+import { logger } from "../utils/logger.js";
 
 export async function getAll(req,res,next){
     try{
@@ -6,6 +7,7 @@ export async function getAll(req,res,next){
         res.status(200).send(messages);
     }
     catch(error){
+        logger.info(error.message)
         res.status(400).send(error);        
     }
 }

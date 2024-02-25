@@ -10,7 +10,7 @@ class ProductsService {
         return await productsDao.readOne({code: cod});
     }
     async getById(id){
-        return await productsDao.readOne({_id: id});
+        return await productsDao.readOne({_id : id});
     }
 
 async paginar (criterio, opciones){
