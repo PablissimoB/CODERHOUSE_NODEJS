@@ -8,7 +8,7 @@ export async function getAll(req,res,next){
     }
     catch(error){
             logger.error(error.message)
- addLoggerHistorial(error.message) 
+            addLoggerHistorial(error.message) 
         res.status(400).send(error);        
     }
 }
