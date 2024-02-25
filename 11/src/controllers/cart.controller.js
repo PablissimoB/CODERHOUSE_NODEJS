@@ -3,7 +3,7 @@ import { cartsServices } from "../services/carts.services.js";
 import { ProductsServices } from "../services/products.services.js";
 import { ticketService } from "../services/tickets.services.js";
 import { errorService } from "../error/error.services.js";
-import { logger } from "../utils/logger.js";
+import { addLoggerHistorial, logger } from "../utils/logger.js";
 
 export async function getAll(req,res,next){
     try {
@@ -17,7 +17,8 @@ export async function getAll(req,res,next){
         }
 
     } catch (error) {
-        logger.info(error.message)
+        logger.error(error.message)
+        addLoggerHistorial(error.message)
         const errorNew = errorService.newError(ErrorType.SERVER_ERROR, error.message)
         next(errorNew);
     }   
@@ -73,7 +74,8 @@ export async function purchase(req,res,next){
         next(errorNew);
     }
 } catch (error) {
-    logger.info(error.message)    
+    logger.error(error.message)
+    addLoggerHistorial(error.message) 
     const errorNew = errorService.newError(ErrorType.POST_ERROR, 'Error al generar Ticket')
     next(errorNew);  
 }  
@@ -90,7 +92,8 @@ export async function post(req,res,next){
         }
     }
         catch(error){
-            logger.info(error.message)
+            logger.error(error.message)
+            addLoggerHistorial(error.message)
             const errorNew = errorService.newError(ErrorType.POST_ERROR, 'Error al agregar registro')
             next(errorNew);
         }
@@ -125,7 +128,9 @@ export async function substractProductToCart(req,res,next){
             }
         }
         catch(error){
-            logger.info(error.message)
+                logger.error(error.message)
+ addLoggerHistorial(error.message) 
+            addLoggerHistorial(error.message)
             const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'Error al modificar carrito')
             next(errorNew);
         }
@@ -160,7 +165,8 @@ export async function addProductToCart(req,res,next){
 
     }
     catch (error){
-        logger.info(error.message)
+        logger.error(error.message)
+        addLoggerHistorial(error.message)
         const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'El carrito que trata de modificar no existe')
         next(errorNew);
         // next(error)
@@ -181,7 +187,9 @@ export async function emptyCart (req,res,next) {
         }
     }
     catch(error){
-        logger.info(error.message)
+
+        logger.error(error.message)
+        addLoggerHistorial(error.message)
         const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'No existe el carrito')
             next(errorNew);
             // next(error)
@@ -213,7 +221,8 @@ export async function modifyCart (req,res) {
         }
     }
     catch(error){
-        logger.info(error.message)
+        logger.error(error.message)
+        addLoggerHistorial(error.message)
         const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'Error al vaciar el carrito')
         next(errorNew);
     }
@@ -244,7 +253,8 @@ export async function modifyProductQuantityCart (req,res,next) {
         }
     }
     catch(error){
-        logger.info(error.message)
+        logger.error(error.message)
+        addLoggerHistorial(error.message)
         const errorNew = errorService.newError(ErrorType.UPDATE_ERROR, 'Error en el la actualizacion del carrito')
         next(errorNew);
         // next(error)
