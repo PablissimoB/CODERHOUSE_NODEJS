@@ -1,0 +1,28 @@
+paths:
+  /api/products/:id:
+    get:
+      summary: devuelve el producto
+      tags:
+      - Products
+    put:
+      summary: modifica producto
+      tags:
+      - Products
+    delete:
+      summary: elimina producto
+      tags:
+      - Products
+  /api/products/:
+    post:
+      summary: crea producto
+      tags:
+      - Products
+    get:
+      summary: trae todos los productos
+      tags:
+      - Products
+  /api/products/mockingproducts:
+    get:
+      summary: genera productos de prueba
+      tags:
+      - Products

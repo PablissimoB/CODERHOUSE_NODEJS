@@ -1,0 +1,14 @@
+components:
+  schemas:
+    CartSchema:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: identificador de carrito
+        products:
+          type: Array
+          description: arreglo con los diferentes productos y sus cantidades
+      example:
+        _id: '64fd09d885e276a633a2e8aa'
+        products: [{_id: '65c7cb0ac0f46c5b20b76cf5', quantity: 2}]

@@ -12,9 +12,6 @@ export async function getAll(req,res,next){
         if (cart){
             res.status(200).send(cart);
         }
-        else{
-
-        }
 
     } catch (error) {
         logger.error(error.message)

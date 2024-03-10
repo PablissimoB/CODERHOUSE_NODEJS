@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2';
-import { toPOJO } from '../../utils/utils.js'
 
 const productSchema = new Schema ({
     title: {

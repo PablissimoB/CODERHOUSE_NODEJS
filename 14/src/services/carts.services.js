@@ -9,7 +9,7 @@ class CartServices{
     }
 
     async getById(id){
-        return await cartsDao.readOne({_id:id});
+        return await cartsDao.readById(id);
     }
 
 async paginar (criterio, opciones){

@@ -11,13 +11,16 @@ import cartRouter from "../routes/api/carts.routes.js";
 import messageRouter from '../routes/api/messages.routes.js';
 import { engine } from 'express-handlebars';
 import path from 'path';
-import { JWT_SECRET } from '../config.js';
+import { JWT_SECRET, SWAGGER_CONFIG } from '../config.js';
 import { __dirname } from '../path.js';
 import { cartsWebRouter } from '../routes/web/carts.routes.js';
 import { productsWebRouter } from '../routes/web/products.routes.js';
 import { messagesWebRouter } from '../routes/web/messages.routes.js';
 import ticketRouter from '../routes/api/tickets.routes.js';
 import { loggerRouter } from '../test/logger.test.js';
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUiExpress from 'swagger-ui-express'
+import { spawn } from 'child_process';
 
 export const app = express()
 
@@ -43,3 +46,6 @@ app.use('/',usersWebRouter);
 app.use('/',cartsWebRouter);
 app.use('/',productsWebRouter);
 app.use('/',messagesWebRouter);
+const specs = swaggerJSDoc(SWAGGER_CONFIG)
+
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));

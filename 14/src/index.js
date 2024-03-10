@@ -1,4 +1,3 @@
-import { PORT } from './config.js';
 import { __dirname } from './path.js';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';

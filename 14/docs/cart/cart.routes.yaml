@@ -1,0 +1,37 @@
+paths:
+  /api/carts/:cid:
+    get:
+      summary: devuelve el carrito con _id = cantidades
+      tags:
+      - Carts
+    put:
+      summary: modifica carrito
+      tags:
+      - Carts
+    delete:
+      summary: vacia carrito
+      tags:
+      - Carts
+  /api/carts/:
+    post:
+      summary: crea carrito
+      tags:
+      - Carts
+  /api/carts/:cid/purchase:
+    post:
+      summary: crea ticket de operacion
+      tags:
+      - Carts
+  /api/carts/:cid/products/:pid:
+    post:
+      summary: agrega productos al carrito
+      tags:
+      - Carts
+    delete:
+      summary: elimina productos del carrito
+      tags:
+      - Carts
+    put:
+      summary: modifica cantidad de productos del carrito
+      tags:
+      - Carts

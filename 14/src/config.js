@@ -12,3 +12,14 @@ export const logLevel = {
     CONSOLE: NODE_ENV === 'production' ? 'info' : '',
     FILE: NODE_ENV === 'development' ? 'debug' : ''
 }
+export const SWAGGER_CONFIG = {
+    definition: {
+      openapi: '3.0.1',
+      info: {
+        version: '1',
+        title: 'Swagger',
+        description: ''
+      }
+    },
+    apis: ['./docs/**/*.yaml']
+  }
