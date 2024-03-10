@@ -1,7 +1,15 @@
 paths:
   /api/carts/:cid:
     get:
-      summary: devuelve el carrito con _id = cantidades
+      summary: devuelve el carrito con _id
+      responses:
+        '201':
+          description: Devuelve carrito
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/CartSchema'
       tags:
       - Carts
     put:
@@ -30,6 +38,10 @@ paths:
       - Carts
     delete:
       summary: vacia carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
       tags:
       - Carts
   /api/carts/:
@@ -54,18 +66,43 @@ paths:
   /api/carts/:cid/purchase:
     post:
       summary: crea ticket de operacion
+      parameters:
+        - name: cartId
+          in: path
+          required: true
       tags:
       - Carts
   /api/carts/:cid/products/:pid:
     post:
       summary: agrega productos al carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+        - name: productId
+          in: path
+          required: true
       tags:
       - Carts
     delete:
       summary: elimina productos del carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+        - name: productId
+          in: path
+          required: true
       tags:
       - Carts
     put:
       summary: modifica cantidad de productos del carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+        - name: productId
+          in: path
+          required: true
       tags:
       - Carts

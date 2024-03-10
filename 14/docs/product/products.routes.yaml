@@ -2,6 +2,14 @@ paths:
   /api/products/:id:
     get:
       summary: devuelve el producto
+      responses:
+        '201':
+          description: Devuelve producto
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ProductSchema'
       tags:
       - Products
     put:
@@ -31,6 +39,10 @@ paths:
       - Products
     delete:
       summary: elimina producto
+      parameters:
+        - name: productId
+          in: path
+          required: true
       tags:
       - Products
   /api/products/:
@@ -44,7 +56,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ProductSchema'
       responses:
-        '200':
+        '201':
           description: Producto añadido correctamente
           content:
             application/json:
@@ -54,6 +66,15 @@ paths:
       - Products
     get:
       summary: trae todos los productos
+      responses:
+        '201':
+          description: Listado de productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductSchema'
       tags:
       - Products
   /api/products/mockingproducts:
