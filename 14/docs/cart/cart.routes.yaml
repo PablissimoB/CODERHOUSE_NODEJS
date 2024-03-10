@@ -6,6 +6,26 @@ paths:
       - Carts
     put:
       summary: modifica carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: ID del carrito a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartSchema'
+      responses:
+        '200':
+          description: Carrito actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartSchema'
       tags:
       - Carts
     delete:
@@ -15,6 +35,20 @@ paths:
   /api/carts/:
     post:
       summary: crea carrito
+      operationId: createCart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartSchema'
+      responses:
+        '200':
+          description: Carrito creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartSchema'
       tags:
       - Carts
   /api/carts/:cid/purchase:

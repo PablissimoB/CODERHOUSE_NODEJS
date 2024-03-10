@@ -31,5 +31,12 @@ components:
           type: Boolean
           description: estado del producto (true disponible, false no disponible)
       example:
-        _id: '64fd09d885e276a633a2e8aa'
-        products: [{_id: "64fcf31ef2c415eb2f0a6421",title: "uno",description: "uno", price: 1, thumbnail: [],code: "1",stock: 1,category: "uno",status: true}]
+        _id: "64fcf31ef2c415eb2f0a6421"
+        title: "uno"
+        description: "uno"
+        price: 1
+        thumbnail: []
+        code: "1"
+        stock: 1
+        category: "uno"
+        status: true

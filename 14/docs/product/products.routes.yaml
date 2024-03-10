@@ -6,6 +6,27 @@ paths:
       - Products
     put:
       summary: modifica producto
+      operationId: updateProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: ID del producto a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSchema'
+      responses:
+        '200':
+          description: Producto actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSchema'
       tags:
       - Products
     delete:
@@ -15,6 +36,20 @@ paths:
   /api/products/:
     post:
       summary: crea producto
+      operationId: addProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSchema'
+      responses:
+        '200':
+          description: Producto añadido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSchema'
       tags:
       - Products
     get:
