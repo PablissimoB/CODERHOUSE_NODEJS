@@ -1,0 +1,42 @@
+components:
+  schemas:
+    ProductSchema:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: identificador de producto
+        title:
+          type: String
+          description: titulo del producto
+        description:
+          type: String
+          description: descripcion del producto
+        price:
+          type: Number
+          description: precio del producto
+        thumbnaiul:
+          type: Array
+          description: fotos del producto
+        code:
+          type: String
+          description: codigo interno del producto
+        stock:
+          type: Number
+          description: stock del producto
+        category:
+          type: String
+          description: categoria del producto
+        status:
+          type: Boolean
+          description: estado del producto (true disponible, false no disponible)
+      example:
+        _id: "64fcf31ef2c415eb2f0a6421"
+        title: "uno"
+        description: "uno"
+        price: 1
+        thumbnail: []
+        code: "1"
+        stock: 1
+        category: "uno"
+        status: true

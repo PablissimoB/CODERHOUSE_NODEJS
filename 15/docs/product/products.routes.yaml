@@ -1,0 +1,84 @@
+paths:
+  /api/products/:id:
+    get:
+      summary: devuelve el producto
+      responses:
+        '201':
+          description: Devuelve producto
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ProductSchema'
+      tags:
+      - Products
+    put:
+      summary: modifica producto
+      operationId: updateProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: ID del producto a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSchema'
+      responses:
+        '200':
+          description: Producto actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSchema'
+      tags:
+      - Products
+    delete:
+      summary: elimina producto
+      parameters:
+        - name: productId
+          in: path
+          required: true
+      tags:
+      - Products
+  /api/products/:
+    post:
+      summary: crea producto
+      operationId: addProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSchema'
+      responses:
+        '201':
+          description: Producto añadido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSchema'
+      tags:
+      - Products
+    get:
+      summary: trae todos los productos
+      responses:
+        '201':
+          description: Listado de productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductSchema'
+      tags:
+      - Products
+  /api/products/mockingproducts:
+    get:
+      summary: genera productos de prueba
+      tags:
+      - Products

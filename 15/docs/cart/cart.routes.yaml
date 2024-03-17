@@ -1,0 +1,108 @@
+paths:
+  /api/carts/:cid:
+    get:
+      summary: devuelve el carrito con _id
+      responses:
+        '201':
+          description: Devuelve carrito
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/CartSchema'
+      tags:
+      - Carts
+    put:
+      summary: modifica carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: ID del carrito a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartSchema'
+      responses:
+        '200':
+          description: Carrito actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartSchema'
+      tags:
+      - Carts
+    delete:
+      summary: vacia carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+      tags:
+      - Carts
+  /api/carts/:
+    post:
+      summary: crea carrito
+      operationId: createCart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartSchema'
+      responses:
+        '200':
+          description: Carrito creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartSchema'
+      tags:
+      - Carts
+  /api/carts/:cid/purchase:
+    post:
+      summary: crea ticket de operacion
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+      tags:
+      - Carts
+  /api/carts/:cid/products/:pid:
+    post:
+      summary: agrega productos al carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+        - name: productId
+          in: path
+          required: true
+      tags:
+      - Carts
+    delete:
+      summary: elimina productos del carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+        - name: productId
+          in: path
+          required: true
+      tags:
+      - Carts
+    put:
+      summary: modifica cantidad de productos del carrito
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+        - name: productId
+          in: path
+          required: true
+      tags:
+      - Carts
