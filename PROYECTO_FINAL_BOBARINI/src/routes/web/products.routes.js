@@ -1,13 +1,16 @@
 import { Router } from "express";
-import {onlyRole} from '../../middlewares/authorization.js'
+import {onlyRole} from '../../middlewares/authorization.js';
+import { decrypt } from '../../utils/cryptographic.js';
 import axios from 'axios';
 
 export const productsWebRouter = Router()
 
 productsWebRouter.get('/static', onlyRole('both'),  async (req, res) => {
-    let prods = await axios.get('http://localhost:4000/api/products');
+    const prods = await axios.get('http://localhost:4000/api/products');
+
     res.render('home', {
         products: prods.data.docs,
+        ... await decrypt(req.signedCookies['authorization']),
         ...req.session['user'],
         js: 'main.js'
     })
@@ -19,6 +22,7 @@ productsWebRouter.get('/static/product/:pid', onlyRole('both'), async (req, res)
         let prod = await axios.get('http://localhost:4000/api/products/'+pid);
         res.render('product', {
             product: prod.data,
+            ... await decrypt(req.signedCookies['authorization']),
             js: 'product.js'
         })
     }

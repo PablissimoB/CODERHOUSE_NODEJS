@@ -5,11 +5,11 @@ import { decrypt } from '../../utils/cryptographic.js';
 
 export const cartsWebRouter = Router()
 
-cartsWebRouter.get('/static/cart/:cid', onlyRole('user'),   async (req, res) => {
-    const cid = req.params.cid;
-    const cart = await axios.get('http://localhost:4000/api/carts/'+cid);
+cartsWebRouter.get('/static/cart/', onlyRole('user'),   async (req, res) => {
+    const user = await decrypt(req.signedCookies['authorization']);
+    const cart = await axios.get('http://localhost:4000/api/carts/'+user.current_cart);
     res.render('cart', {
-        ... await decrypt(req.signedCookies['authorization']),
+        ... user,
         cart : cart.data,
         js: 'cart.js'
     })

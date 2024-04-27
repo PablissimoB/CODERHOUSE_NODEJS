@@ -1,6 +1,6 @@
 <h1>Lista de productos</h1>
 <hr>
-<h2>Bienvenido {{nombre}}</h2>
+<h2>Bienvenido {{last_name}}</h2>
 {{#each products}}
     <div class="card text-bg-success mb-3" style="width: 18rem;">
         <div class="card-body">
@@ -8,8 +8,7 @@
             <p class="card-text">{{this.description}}</p>
             <p class="card-text">precio : {{this.price}} - stock: {{this.stock}}</p>
             <a href="product/{{this._id}}"><button class="btn btn-primary"> View</button></a></li>
-            <button onclick="addToCart('64fd09d885e276a633a2e8aa','{{this._id}}');" class="btn btn-secondary"> Add</button>
+            <button onclick="addToCart('{{../current_cart}}','{{this._id}}');" class="btn btn-secondary"> Add</button>
         </div>
     </div>
-
 {{/each}}

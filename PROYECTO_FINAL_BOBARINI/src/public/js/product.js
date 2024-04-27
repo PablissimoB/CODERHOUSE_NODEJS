@@ -1,5 +1,5 @@
 function addToCart(id_cart,id_prod) {
-    let prods; {
+    
         const endpoint = `http://localhost:4000/api/carts/${id_cart}/products/${id_prod}`;
 
         fetch(endpoint, {
@@ -16,5 +16,5 @@ function addToCart(id_cart,id_prod) {
             .catch(error => {
                 console.error('Error:', error);
             });
-    }
+
 }
