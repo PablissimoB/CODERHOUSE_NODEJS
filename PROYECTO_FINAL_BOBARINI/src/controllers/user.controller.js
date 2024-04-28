@@ -1,7 +1,7 @@
 import { usersServices } from "../services/users.services.js";
 import { cartsServices } from "../services/carts.services.js";
 import { toPOJO } from "../utils/utils.js";
-import { Types } from "mongoose";
+import { emailService } from "../services/email.service.js";
 
 export async function get(req,res,next){
     const id = req.params.id;
@@ -111,6 +111,7 @@ export async function deleteUsers(req, res,next){
         if( currentTime -  lastLogin > 2880 * 60 * 1000){
             console.log("a eliminar usuario: " + user._id);
             const userDeleted = await usersServices.deleteUser(id);
+            const mensaje = await emailService.send(user.email, "Su cuenta fue eliminada", "Hemos eliminado su cuenta porque no se logeo en los ultimos 2 dias");
             }
         }
         res.status(200).end();

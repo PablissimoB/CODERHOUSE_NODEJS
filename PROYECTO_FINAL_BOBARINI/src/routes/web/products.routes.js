@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {onlyRole} from '../../middlewares/authorization.js';
+import {onlyRole, twoRole} from '../../middlewares/authorization.js';
 import { decrypt } from '../../utils/cryptographic.js';
 import axios from 'axios';
 
@@ -32,7 +32,7 @@ productsWebRouter.get('/static/product/:pid', onlyRole('both'), async (req, res)
     
 })
 
-productsWebRouter.get('/static/realtimeproducts', onlyRole('admin'),   async (req, res) => {
+productsWebRouter.get('/static/realtimeproducts', twoRole('admin','premium'),   async (req, res) => {
     let prods = await axios.get('http://localhost:4000/api/products');
     res.render('realtimeproducts', {
         products: prods.data.docs,
