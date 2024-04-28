@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {onlyRole} from '../../middlewares/authorization.js'
+import {onlyRole, twoRole} from '../../middlewares/authorization.js'
 import { messageModel } from '../../dao/message/messages.models.js';
 import { decrypt } from '../../utils/cryptographic.js';
 
@@ -15,7 +15,7 @@ async function getMessages(){
 export let mensajes;
 
 
-messagesWebRouter.get('/static/Chat', onlyRole('user'),  async (req, res) => {
+messagesWebRouter.get('/static/Chat', twoRole('user','premium'),  async (req, res) => {
     mensajes = await getMessages();
     res.render('chat', {
         ... await decrypt(req.signedCookies['authorization']),

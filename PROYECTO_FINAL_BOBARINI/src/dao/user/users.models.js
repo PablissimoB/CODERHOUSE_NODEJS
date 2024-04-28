@@ -17,7 +17,7 @@ const userSchema = new Schema({
     ,
     role: {
         type: String,
-        enum: ['admin', 'user'],
+        enum: ['admin', 'user', 'premium'],
         default: 'user'
     },
     email: {
@@ -31,9 +31,6 @@ const userSchema = new Schema({
                 _id: {
                     type: Schema.Types.ObjectId,
                     ref: 'carts',
-                },
-                status: {
-                    type: Boolean
                 }
             }
         ],

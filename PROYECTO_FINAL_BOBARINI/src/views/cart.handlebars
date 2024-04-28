@@ -1,9 +1,6 @@
 <h1>Resumen de carrito</h1>
 <hr>
-<form id="formAdd" method="POST" action="/api/carts/{{cart._id}}/purchase">
-<div class="row">
-<input type="email" name="email" id="email" value="{{email}}" readonly>
-</div>
+<form id="formAdd" method="GET" action="success">
 <div class="row">
 <button type="submit" class="margin-top btn btn-success">Buy</button>
 </div>

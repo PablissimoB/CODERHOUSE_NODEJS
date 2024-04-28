@@ -21,3 +21,21 @@ export function onlyRole(roles){
       };
   }
    
+  export function twoRole(role1, role2){
+    return async function (req, res, next) {
+
+        const rol = req.signedCookies['authorization'];
+        if(!rol){
+            return res.redirect('/static/UserLogin')
+        }
+        else{
+            const decrypteUser = await decrypt(rol);
+            if (role1 == decrypteUser.role || role2 == decrypteUser.role) {
+                next();
+              } else {
+                return res.redirect('/static/Error')
+              }
+        }
+        
+      };
+  }

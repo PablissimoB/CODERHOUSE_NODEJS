@@ -9,6 +9,7 @@ formRegister?.addEventListener('submit', async event => {
     // @ts-ignore
     body: new URLSearchParams(new FormData(formRegister))
   })
+  
     const data = await response.json()
     window.location.href = '/static/UserLogin';
     localStorage.setItem('token', data.token)

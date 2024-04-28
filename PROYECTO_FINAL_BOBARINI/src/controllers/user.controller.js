@@ -1,5 +1,7 @@
 import { usersServices } from "../services/users.services.js";
+import { cartsServices } from "../services/carts.services.js";
 import { toPOJO } from "../utils/utils.js";
+import { Types } from "mongoose";
 
 export async function get(req,res,next){
     const id = req.params.id;
@@ -20,8 +22,12 @@ export async function get(req,res,next){
 
 export async function postUser(req,res,next){
     try {
-        const usuario = await usersServices.addUser(req.body)
-        req.user = usuario
+        const newCart = await cartsServices.newCart();
+        const usuario = req.body;
+        const user = await usersServices.addUser(usuario)
+        const cartUpdated = [newCart._id];
+        const userUpdated = await usersServices.updateUser(user._id, {current_cart: newCart._id, cart: cartUpdated });
+        req.user = userUpdated
         res.status(201).json({
             status: 'success',
             payload: user.toObject(),
@@ -36,15 +42,15 @@ export async function postUser(req,res,next){
 
 export async function autenticar(req,res,next){
     const { user } = req;
-    const { current_cart, email, role, first_name, last_name } = user;
-    const responseObject = {current_cart, email, role, first_name, last_name };
+    const { current_cart, email, role, first_name, last_name, _id } = user;
+    const responseObject = {current_cart, email, role, first_name, last_name, _id };
     res.json(toPOJO(responseObject))
 }
 
 export async function getAllUsers(req, res,next){
     try {
         const users = await usersServices.getAllUser()
-        const usersData = users.map(user => {return {  role: user.role, first_name: user.first_name, last_name: user.last_name, email: user.email}})
+        const usersData = users.map(user => {return {  role: user.role, first_name: user.first_name, last_name: user.last_name, email: user.email, _id: user._id}})
         res.status(200).send(toPOJO(usersData))
     } catch (error) {
         next(error)

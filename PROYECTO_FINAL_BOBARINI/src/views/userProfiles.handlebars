@@ -1,12 +1,14 @@
 <h1>Usuarios</h1>
     {{#each usuarios}}
-    <div class="card text-bg-success mb-3 margin-right" style="width: 15rem;">
+    <div class="card text-bg-success mb-3 margin-right" style="width: 20rem;">
         <div class="card-body">
             <p>Usuario : {{this.first_name}} {{this.last_name}}</p>
             <p>Rol : {{this.role}} </p>
-            <button onclick="delete('{{this._id}}');" class="btn btn-danger"> delete</button>
-            <button onclick="modify('{{this._id}}');" class="btn btn-primary"> change role admin</button>
-            <button onclick="modify('{{this._id}}');" class="btn btn-secondary"> change role user</button>
+            <p>id: {{this._id}}</p>
+            <button onclick="deletear('{{this._id}}');" class="btn btn-danger"> delete</button>
+            <button onclick="modify('{{this._id}}','admin');" class="btn btn-primary"> change role admin</button>
+            <button onclick="modify('{{this._id}}','user');" class="btn btn-secondary"> change role user</button>
+            <button onclick="modify('{{this._id}}','premium');" class="btn btn-warning"> change role premium</button>
         </div>
     </div>
 {{/each}}

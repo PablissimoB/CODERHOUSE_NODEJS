@@ -1,7 +1,7 @@
 import { cartsServices } from "../services/carts.services.js";
 import { ProductsServices } from "../services/products.services.js";
 import { ticketService } from "../services/tickets.services.js";
-
+import { usersServices } from "../services/users.services.js";
 
 export async function getAll(req,res,next){
     try {
@@ -19,9 +19,11 @@ export async function getAll(req,res,next){
 }
 export async function purchase(req,res,next){
     try {
-    const cid = req.params.cid;
-    const email = req.body;
-
+    const email = req.body.email;
+    const uid = req.body._id;
+    const user = await usersServices.getUser('_id', uid);
+    const cid = user.current_cart;
+    
     const cart = await cartsServices.getById(cid);
     if (cart){
         
@@ -57,8 +59,20 @@ export async function purchase(req,res,next){
             const ticket = await ticketService.createTicket({amount : amount , purchaser: email.email });
             
             //actualizo carrito con productos no disponibles
-            cart.products = productsUnavailables;
-            await cartsServices.putOne({_id: cid}, {$set:cart});
+            // cart.products = productsUnavailables;
+            // await cartsServices.putOne({_id: cid}, {$set:cart});
+
+            //creo nuevo carrito
+            const newCart = await cartsServices.newCart();
+
+            //agrego a usuario el nuevo carrito 
+            const cartUpdated = user.cart;
+            if(newCart){
+                cartUpdated.push({ _id: newCart._id });
+            }
+
+            //cambio current_cart
+            const userUpdated = await usersServices.updateUser(uid, {current_cart: newCart._id, cart: cartUpdated })
 
             res.status(200).send(ticket);
         }
@@ -78,7 +92,7 @@ export async function post(req,res,next){
     try{
         const alta = await cartsServices.newCart();
         if(alta){
-            res.status(200).send("Alta realizada");
+            res.status(200).send(alta);
         }
         else{
             res.status(404).send("Error");
